@@ -1,0 +1,12 @@
+node_modules/
+dist/
+release/
+*.tsbuildinfo
+.verification/
+.env
+.env.*
+!.env.example
+*.log
+*.pfx
+*.p12
+*.pem
