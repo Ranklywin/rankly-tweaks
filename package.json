@@ -20,7 +20,7 @@
     "checksums": "node scripts/checksums.mjs"
   },
   "devDependencies": {
-    "@fontsource/poppins": "5.2.7",
+    "@fontsource/poppins": "5.3.0",
     "@types/node": "24.13.4",
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
