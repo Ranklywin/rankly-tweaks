@@ -13,6 +13,7 @@ export interface Status { system: SystemInfo|null; states: Record<string,TweakSt
 export interface NetworkResult { target: string; testedAt: string; samples: (number|null)[] }
 export interface SessionApp { token:string; name:string; processCount:number; memoryMB:number }
 export interface CloseAppsResult { closedProcesses:number; skippedProcesses:number; failedProcesses:number }
+export interface UpdateInfo { current:string; latest:string|null; newer:boolean; url:string|null; publishedAt:string|null; checkedAt:string }
 export type NativeResult<T> = {ok:true; data:T} | {ok:false; error:string};
 export interface NativeBridge {
   sessionApps():Promise<NativeResult<SessionApp[]>>;
@@ -24,6 +25,8 @@ export interface NativeBridge {
   openSettings(id:string):Promise<NativeResult<void>>;
   openSource(id:string):Promise<NativeResult<void>>;
   exportReport():Promise<NativeResult<string|null>>;
+  checkUpdate():Promise<NativeResult<UpdateInfo>>;
+  openRelease():Promise<NativeResult<void>>;
   windowControl(action:string):Promise<NativeResult<void>>;
 }
 declare global { interface Window { rankly?: NativeBridge } }

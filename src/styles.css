@@ -80,4 +80,7 @@
 .polling-scale small,.polling-scale span{font-size:8px;color:var(--muted);font-weight:400}
 .polling-scale .active{border-color:var(--mint);background:var(--mint-soft)}
 .polling-scale .active strong{color:var(--mint)}
-@media(max-width:700px){.checkup-item{flex-wrap:wrap}.checkup-item>.button{margin-left:50px}.polling-scale{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:700px){.checkup-item{flex-wrap:wrap}.checkup-item>.button{margin-left:50px}.polling-scale{grid-template-columns:repeat(3,minmax(0,1fr))}}.notice.update-notice{background:var(--mint-soft);color:var(--mint);border-color:color-mix(in srgb,var(--mint) 25%,var(--border))}
+.notice.update-notice button{font-weight:500}
+.about-panel .update-status{font-size:9px;color:var(--subtle);margin-top:12px}
+.about-links .text-link:disabled{opacity:.6;cursor:default;text-decoration:none}

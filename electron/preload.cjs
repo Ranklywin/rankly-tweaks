@@ -9,5 +9,7 @@ contextBridge.exposeInMainWorld('rankly', Object.freeze({
   openSettings: id => ipcRenderer.invoke('rankly:settings', id),
   openSource: id => ipcRenderer.invoke('rankly:source', id),
   exportReport: () => ipcRenderer.invoke('rankly:export'),
+  checkUpdate: () => ipcRenderer.invoke('rankly:update-check'),
+  openRelease: () => ipcRenderer.invoke('rankly:open-release'),
   windowControl: action => ipcRenderer.invoke('rankly:window', action),
 }));

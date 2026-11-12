@@ -17,6 +17,9 @@ app.whenReady().then(async () => {
   const sessionApps = new SessionApps();
   const { tweaks, guides } = await import('../shared/catalog.mjs');
   const { socials } = await import('../shared/socials.mjs');
+  const { checkForUpdate } = await import('./updates.mjs');
+  // The renderer never supplies a URL; only a validated release page from the last check can open.
+  let releasePage = null;
   const engine = new TweakEngine(app.getPath('userData'));
   const handle = (channel, fn) => ipcMain.handle(`rankly:${channel}`, async (event, ...args) => {
     if (!window || event.sender !== window.webContents || event.senderFrame !== window.webContents.mainFrame || event.senderFrame.url !== trustedURL) throw new Error('Untrusted application frame.');
@@ -33,6 +36,8 @@ app.whenReady().then(async () => {
   handle('restore', id => { if(sessionApps.busy)throw new Error('Wait for app closing to finish.'); if (typeof id !== 'string') throw new Error('Invalid backup.'); return engine.restore(id); });
   let testingNetwork = false;
   handle('network', async target => { if (testingNetwork) throw new Error('A connection test is already running.'); testingNetwork=true; try { return await native.pingNetwork(target); } finally { testingNetwork=false; } });
+  handle('update-check', async () => { const info = await checkForUpdate(); releasePage = info.newer ? info.url : null; return info; });
+  handle('open-release', async () => { if (!releasePage) throw new Error('Check for updates first.'); await shell.openExternal(releasePage); });
   handle('settings', async id => { const item=guides.find(g=>g.id===id); if(!item) throw new Error('Unknown settings page.'); await shell.openExternal(item.uri); });
   handle('source', async id => { const item=[...tweaks,...guides,...socials].find(g=>g.id===id); if(!item?.source || !item.source.startsWith('https://')) throw new Error('No source for this link.'); await shell.openExternal(item.source); });
   handle('export', async () => {
