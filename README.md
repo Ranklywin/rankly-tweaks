@@ -10,6 +10,7 @@ Windows 10 21H2+ or Windows 11, x64. Portable, requires administrator access,
 and currently unsigned. [Release notes and checksum](https://github.com/Ranklywin/rankly-tweaks/releases/tag/v1.0.0).
 
 - Gaming, graphics, power, input, and network controls.
+- A performance checkup for setup problems, and a mouse polling test.
 - Support checks, change review, and local recovery.
 - Dark/light themes and searchable tweaks.
 

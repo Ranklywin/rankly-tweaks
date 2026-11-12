@@ -4,19 +4,30 @@ import { Activity, ArrowRight, ArrowUpRight, BellOff, Check, ChevronDown, Circle
 import { tweaks, guides } from '../shared/catalog.mjs';
 import { socials } from '../shared/socials.mjs';
 import { summarizeNetwork } from '../shared/metrics.mjs';
+import { summarizePolling, POLLING_RATES } from '../shared/input-test.mjs';
 import type { Status, NativeResult, NetworkResult, SessionApp } from './types';
 import { Dropdown } from './components/Dropdown';
 import { SocialIcon } from './components/SocialIcon';
 
-type Page = 'Overview'|'Tweaks'|'Network'|'Recovery'|'Settings';
+type Page = 'Overview'|'Tweaks'|'Network'|'Input'|'Recovery'|'Settings';
 type Tweak = typeof tweaks[number];
 type Guide = typeof guides[number];
+type PollingState = {phase:'idle'|'waiting'|'measuring'|'done';events:number;result?:ReturnType<typeof summarizePolling>};
+const POLLING_TEST_MS = 4000;
 const native = Boolean(window.rankly);
 const Icons = { Activity, ArrowRight, ArrowUpRight, BellOff, Check, ChevronDown, Circle, CircleAlert, CircleCheck, CircleHelp, Clock3, Cpu, Download, ExternalLink, Fingerprint, Gamepad2, HardDrive, History, Info, Layers, LayoutDashboard, Lightbulb, LoaderCircle, LockKeyhole, MemoryStick, Minus, Monitor, Moon, Mouse, MousePointer2, Network, Palette, PanelsTopLeft, PanelTop, PlugZap, RefreshCw, RotateCcw, Router, ScanLine, ScanSearch, Search, SearchX, Settings, ShieldCheck, SlidersHorizontal, Sparkles, Square, Sun, VideoOff, X, Zap };
 const nav: {name:Page;icon:string;group:string}[] = [
   {name:'Overview',icon:'LayoutDashboard',group:'MAIN'}, {name:'Tweaks',icon:'SlidersHorizontal',group:''},
-  {name:'Network',icon:'Network',group:'YOUR TOOLKIT'}, {name:'Recovery',icon:'History',group:''},
+  {name:'Network',icon:'Network',group:'YOUR TOOLKIT'}, {name:'Input',icon:'Mouse',group:''}, {name:'Recovery',icon:'History',group:''},
 ];
+function pollingVerdict(result:ReturnType<typeof summarizePolling>) {
+  if(!result.rate||!result.interval) return '';
+  const ms=result.interval.toFixed(result.interval<2?2:1);
+  if(!result.nearest) return `Measured ${result.rate} Hz, between standard settings. This usually means the mouse slowed down during the test. Try again with fast, steady circles.`;
+  if(result.nearest>=1000) return `Your mouse sends an update about every ${ms} ms. That is already a fast gaming rate.`;
+  if(result.nearest===500) return 'Good. If your mouse software offers 1000 Hz, choosing it cuts the wait between updates from 2 ms to 1 ms.';
+  return `Your mouse sends an update only every ${ms} ms. If it is a gaming mouse, set 1000 Hz in its software or with its polling button to cut that to 1 ms. Many office mice are fixed at 125 Hz.`;
+}
 function Icon({name,size=19,...props}:{name:string;size?:number;className?:string}) {
   const Component=(Icons as unknown as Record<string,React.ComponentType<{size:number;strokeWidth:number;className?:string}>>)[name] || Icons.Circle;
   return <Component size={size} strokeWidth={1.7} {...props}/>;
@@ -59,6 +70,8 @@ export default function App() {
   const [appsReview,setAppsReview]=useState<SessionApp[]|null>(null);
   const [appsBusy,setAppsBusy]=useState(false);
   const [appsScanned,setAppsScanned]=useState(false);
+  const [polling,setPolling]=useState<PollingState>({phase:'idle',events:0});
+  const pollingStop=useRef<(()=>void)|null>(null);
   const searchRef=useRef<HTMLInputElement>(null);
   const mainRef=useRef<HTMLElement>(null);
   const fullScanRef=useRef(false);
@@ -81,6 +94,27 @@ export default function App() {
   }
   useEffect(()=>{void scan();},[]);
   useEffect(()=>{if(page==='Tweaks'&&window.rankly)void refreshSessionApps();},[page]);
+  useEffect(()=>{if(page!=='Input'&&pollingStop.current){pollingStop.current();setPolling({phase:'idle',events:0});}},[page]);
+  useEffect(()=>()=>pollingStop.current?.(),[]);
+  // Mouse polling test: runs only in this window, stores nothing, and sends nothing.
+  // Raw pointer updates avoid frame-aligned batching where Chromium supports them.
+  function startPolling() {
+    pollingStop.current?.();
+    const times:number[]=[];
+    const type=('onpointerrawupdate' in window?'pointerrawupdate':'pointermove') as 'pointermove';
+    let timer=0,ticker=0;
+    const handler=(e:PointerEvent)=>{
+      if(e.pointerType!=='mouse')return;
+      const coalesced=e.getCoalescedEvents?.()||[];
+      if(coalesced.length)for(const c of coalesced)times.push(c.timeStamp);else times.push(e.timeStamp);
+      if(!timer){setPolling({phase:'measuring',events:times.length});timer=window.setTimeout(finish,POLLING_TEST_MS);ticker=window.setInterval(()=>setPolling(p=>p.phase==='measuring'?{...p,events:times.length}:p),200);}
+    };
+    const stop=()=>{window.removeEventListener(type,handler);window.clearTimeout(timer);window.clearInterval(ticker);pollingStop.current=null;};
+    function finish(){stop();setPolling({phase:'done',events:times.length,result:summarizePolling(times)});}
+    window.addEventListener(type,handler);
+    pollingStop.current=stop;
+    setPolling({phase:'waiting',events:0});
+  }
   const states=status?.states||{};
   const history=status?.history||[];
   const restoringEntry=history.find(e=>e.id===restoring);
@@ -108,10 +142,14 @@ export default function App() {
   const shortCPU=system?.cpu.replace(/\(R\)|\(TM\)|\s*@.*|11th Gen /g,'').replace('Core','Core ').replace(/\s+/g,' ')||'Reading processor…';
   const shortGPU=system?.gpus?.[0]?.Name.replace('NVIDIA GeForce ','').replace('AMD Radeon ','')||'Reading graphics…';
   const refresh=system?.gpus?.find(g=>g.CurrentRefreshRate>1)?.CurrentRefreshRate;
+  const checkup=status?.checkup;
+  const checkupWarnings=checkup?.findings.filter(f=>f.state==='warn').length||0;
+  const pollingResult=polling.result;
   const titleCopy:Record<Page,{eyebrow:string;title:string;description:string}>={
     Overview:{eyebrow:'',title:'Get your setup game-ready.',description:''},
     Tweaks:{eyebrow:'',title:'Fine-tune your setup',description:''},
     Network:{eyebrow:'',title:'Know your connection.',description:''},
+    Input:{eyebrow:'',title:'Check your mouse.',description:''},
     Recovery:{eyebrow:'',title:'Your settings, saved.',description:''},
     Settings:{eyebrow:'',title:'Your Rankly. Your way.',description:''},
   };
@@ -132,6 +170,7 @@ export default function App() {
       {page==='Overview'&&<>
         <section className="hero"><div className="hero-content"><h2>Your next win<br/>starts here<span>.</span></h2><div className="hero-buttons"><Button variant="primary" onClick={()=>{setQuery('');setCategory('All tweaks');setFilter('All statuses');setPage('Tweaks');}}><Icon name="SlidersHorizontal" size={17}/>Explore tweaks<Icon name="ArrowRight" size={17}/></Button></div></div><div className="hero-art" aria-hidden="true"><div className="orbital orbit-one"/><div className="orbital orbit-two"/><div className="orbital orbit-three"/><span className="art-cross cross-one">+</span><span className="art-cross cross-two">+</span><span className="art-dot dot-one"/><span className="art-dot dot-two"/><div className="rank-glow"/><img src="./rank-emblem.svg" alt=""/><div className="art-chip"><Icon name="Zap" size={14}/> BUILT FOR YOUR NEXT LEVEL</div></div></section>
         <div className="stats-grid"><div className="stat-card"><div className="stat-label"><Icon name="Cpu" size={16}/>PROCESSOR</div><strong title={system?.cpu}>{shortCPU}</strong><span>{system?`${system.cores} cores · ${system.threads} logical processors`:'Detecting your hardware'}</span></div><div className="stat-card"><div className="stat-label"><Icon name="Monitor" size={16}/>GRAPHICS</div><strong>{shortGPU}</strong><span>{system?.gpus?.length?'Graphics adapter detected':'Waiting for Windows'}</span></div><div className="stat-card"><div className="stat-label"><Icon name="MemoryStick" size={16}/>MEMORY</div><strong>{system?`${num(system.memoryTotal)} GB`:'—'}<small> installed</small></strong><span>{system?`${num(system.memoryFree,1)} GB currently available`:'Waiting for Windows'}</span></div><div className="stat-card"><div className="stat-label"><Icon name="ScanLine" size={16}/>DISPLAY</div><strong>{refresh?num(refresh):'—'}<small> Hz reported</small></strong><span>{refresh?'Current primary adapter mode':'Refresh rate unavailable'}</span></div></div>
+        <section className="panel checkup-panel" aria-labelledby="checkup-heading"><div className="section-heading"><div><h3 id="checkup-heading">Performance checkup</h3><p>Setup problems that cost FPS or add delay. Checking changes nothing.</p></div><Badge tone={checkup?checkupWarnings?'gold':'mint':'neutral'}>{checkup?checkupWarnings?`${checkupWarnings} to fix`:'All clear':scanning?'Checking…':'Not checked'}</Badge></div>{checkup?.findings.length?<div className="checkup-list">{checkup.findings.map(f=><div className={`checkup-item ${f.state}`} key={f.id}><span className={`icon-tile ${f.state==='warn'?'gold':'mint'}`}><Icon name={f.state==='warn'?'CircleAlert':'CircleCheck'}/></span><div><strong>{f.title}</strong><p>{f.detail}</p></div>{f.guide&&<Button variant="secondary" onClick={()=>void openSettings(f.guide!)}>{f.action||'Open settings'}<Icon name="ExternalLink" size={14}/></Button>}</div>)}</div>:<Empty icon="ScanSearch" title={scanning?'Checking your setup…':'No checkup results yet'}>{native?scanning?'Reading displays, memory, graphics, and power.':'Rescan your PC to run the checkup again.':'Open the Windows app to check your displays, memory, graphics, and power.'}</Empty>}</section>
         <section className="panel system-panel overview-system"><div className="section-heading"><div><h3>Your system, at a glance</h3><p>A live snapshot of your setup.</p></div><Badge tone="neutral"><span className="live-dot"/>{system?'Detected':'Scanning'}</Badge></div><div className="system-detail-row"><span className="icon-tile neutral"><Icon name="PanelsTopLeft"/></span><div><strong>{system?.os.replace('Microsoft ','')||'Reading Windows…'}</strong><span>{system?`Build ${system.build} · ${system.laptop?'Laptop':'Desktop'} system`:'System information will appear here'}</span></div><Icon name="Check" size={17} className="mint-text"/></div><div className="resource-row"><span>Memory usage</span><strong>{system?`${num(memoryUsed,1)} / ${num(system.memoryTotal,1)} GB`:'—'}</strong></div><div className="resource-bar"><i style={{width:`${system?memoryUsed/system.memoryTotal*100:0}%`}}/></div><div className="resource-row"><span>Local disk (C:)</span><strong>{system?`${num(system.diskFree)} GB free of ${num(system.diskTotal)} GB`:'—'}</strong></div><div className="resource-bar blue"><i style={{width:`${system?(system.diskTotal-system.diskFree)/system.diskTotal*100:0}%`}}/></div><div className="system-panel-bottom"><Icon name="PlugZap" size={15}/><span>{system?.powerPlan.match(/\(([^)]+)\)/)?.[1]||'Power plan'}<span className="muted"> · current power plan</span></span><button className="subtle-link" onClick={()=>{setQuery('');setCategory('CPU & power');setFilter('All statuses');setPage('Tweaks');}}>Manage<Icon name="ArrowUpRight" size={14}/></button></div></section>
       </>}
 
@@ -146,6 +185,8 @@ export default function App() {
 
       {page==='Network'&&<><div className="network-layout"><section className="panel"><div className="section-heading"><div><h3>Connection check</h3><p>A quick look at your connection.</p></div><span className="icon-tile blue"><Icon name="Network"/></span></div><div className="network-device"><span className="network-illustration"><Icon name="Router" size={46}/></span><strong>{system?.adapters?.[0]?.Name||'No active adapter detected'}</strong><span>{system?.adapters?.[0]?.InterfaceDescription||'Scan your PC to read network information.'}</span>{system?.adapters?.[0]&&<Badge tone="mint">{system.adapters[0].LinkSpeed} link speed</Badge>}</div><label className="field-label" htmlFor="network-target">Test server</label><Dropdown id="network-target" label="Test server" className="full-select" value={networkTarget} disabled={networkBusy} onChange={setNetworkTarget} options={[{value:'cloudflare',label:'Cloudflare · 1.1.1.1'},{value:'google',label:'Google · 8.8.8.8'},{value:'quad9',label:'Quad9 · 9.9.9.9'}]}/><Button variant="primary" className="full-width" onClick={()=>void runNetwork()} disabled={networkBusy}><Icon name={networkBusy?'LoaderCircle':'Activity'} size={17} className={networkBusy?'spinning':''}/>{networkBusy?'Testing connection…':'Run connection test'}</Button><p className="caption">A quick connection check. Your in-game ping may differ.</p></section><section className="panel network-results"><div className="section-heading"><div><h3>Your connection, measured</h3><p>{network?`${network.target} · ${dateText(network.testedAt)}`:'Run a test to see what’s happening.'}</p></div><Badge tone="neutral">{network?'Measured results':'Awaiting test'}</Badge></div>{network?<><div className="network-metrics">{[['Average latency',summarizeNetwork(network.samples).average,'ms'],['Jitter',summarizeNetwork(network.samples).jitter,'ms'],['Packet loss',summarizeNetwork(network.samples).loss,'%']].map(([label,value,unit])=><div key={String(label)}><span>{label}</span><strong>{num(value as number|null,1)}<small>{unit}</small></strong></div>)}</div><div className="ping-chart" aria-label="Round-trip time per sample">{network.samples.map((n,i)=><div key={i}><span>{n===null?'Lost':`${n} ms`}</span><i className={n===null?'lost':''} style={{height:`${n===null?8:Math.max(8,n/Math.max(1,...network.samples.filter((v):v is number=>v!==null))*115)}px`}}/><small>{i+1}</small></div>)}</div><div className="info-note"><Icon name="Info" size={16}/><span>Lower latency and jitter mean a more responsive, consistent connection.</span></div></>:<Empty icon="Activity" title="A clearer picture starts with a test">Latency, jitter, and loss will appear here after your first measurement.</Empty>}</section></div><div className="guides-grid">{guides.filter(g=>['network-adapter','updates'].includes(g.id)).map(g=><article className="guide-card" key={g.id}><span className="icon-tile blue"><Icon name={g.icon}/></span><div><h3>{g.name}</h3><p>{g.description}</p><button className="text-link" onClick={()=>setDetail(g)}>View settings<Icon name="ArrowUpRight" size={15}/></button></div></article>)}</div><div className="info-note library-note"><Icon name="Lightbulb" size={18}/><span>A good baseline: use Ethernet when available, pause large downloads, and compare tests at similar times. Changing DNS does not guarantee lower in-match ping.</span></div></>}
 
+
+      {page==='Input'&&<><div className="network-layout"><section className="panel"><div className="section-heading"><div><h3>Mouse polling test</h3><p>How often your mouse reports movement.</p></div><span className="icon-tile purple"><Icon name="Mouse"/></span></div><div className={`polling-pad ${polling.phase}`} aria-live="polite"><span className="network-illustration"><Icon name="MousePointer2" size={40}/></span><strong>{polling.phase==='waiting'?'Move your mouse now':polling.phase==='measuring'?'Keep moving in fast circles':polling.phase==='done'?'Test complete':'Ready when you are'}</strong><span>{polling.phase==='measuring'?`${num(polling.events)} updates captured`:polling.phase==='waiting'?'The test starts with your first movement.':polling.phase==='done'?'Run it again after changing your mouse settings.':'Takes about 4 seconds.'}</span></div><Button variant="primary" className="full-width" onClick={startPolling} disabled={polling.phase==='waiting'||polling.phase==='measuring'}><Icon name={polling.phase==='measuring'?'LoaderCircle':'Activity'} size={17} className={polling.phase==='measuring'?'spinning':''}/>{polling.phase==='measuring'?'Measuring…':polling.phase==='waiting'?'Waiting for movement…':polling.phase==='done'?'Test again':'Start mouse test'}</Button><p className="caption">Measured in this window; nothing is sent or saved. Rates above 1000 Hz may read lower here.</p></section><section className="panel network-results"><div className="section-heading"><div><h3>Your mouse, measured</h3><p>{pollingResult?.enough?`${num(pollingResult.events)} updates analyzed`:'Run the test to see your report rate.'}</p></div><Badge tone="neutral">{pollingResult?.enough?'Measured results':'Awaiting test'}</Badge></div>{pollingResult?.enough?<><div className="network-metrics">{[['Report rate',pollingResult.rate,'Hz',0],['Closest setting',pollingResult.nearest,'Hz',0],['Time between updates',pollingResult.interval,'ms',2]].map(([label,value,unit,digits])=><div key={String(label)}><span>{label}</span><strong>{num(value as number|null,digits as number)}<small>{unit}</small></strong></div>)}</div><div className="polling-scale" aria-label="Common polling rates">{POLLING_RATES.slice(0,5).map(rate=><div key={rate} className={pollingResult.nearest===rate?'active':''}><strong>{rate>=1000?`${rate/1000}k`:rate}<small> Hz</small></strong><span>{num(1000/rate,rate>=1000?2:0)} ms</span></div>)}</div><div className="info-note"><Icon name="Info" size={16}/><span>{pollingVerdict(pollingResult)}</span></div></>:pollingResult?<Empty icon="Mouse" title="Not enough movement">Keep the mouse moving quickly for the whole test, then try again.</Empty>:<Empty icon="Mouse" title="How fast does your mouse report?">Your report rate and the time between mouse updates will appear here.</Empty>}</section></div><div className="info-note library-note"><Icon name="Lightbulb" size={18}/><span>A higher polling rate shortens the wait between mouse updates: 125 Hz means up to 8 ms, 1000 Hz up to 1 ms. Change it in your mouse’s software. Very high rates can use more CPU in some games.</span></div></>}
 
       {page==='Recovery'&&<><div className="recovery-banner"><span className="recovery-shield"><Icon name="ShieldCheck" size={36}/></span><div><Badge tone="mint">YOUR SAVED SETTINGS</Badge><h2>Review. Restore. Keep track.</h2><p>Your settings backups appear here after applying tweaks.</p></div><div className="backup-count"><strong>{activeHistory.length}</strong><span>restorable change sets</span></div></div><div className="info-note library-note"><Icon name="Info" size={18}/><span>Restore newest changes first. Restoring also replaces later edits to the same settings.</span></div><section className="panel recovery-list"><div className="section-heading"><div><h3>Change history</h3><p>A clear record of what changed and when.</p></div><Badge tone="neutral">{history.length} records</Badge></div>{history.length?<div className="history-entries">{[...history].reverse().map(entry=><div className="history-entry" key={entry.id}><span className={`icon-tile ${entry.status==='applied'?'mint':entry.status==='restored'?'blue':'neutral'}`}><Icon name={entry.status==='applied'?'Check':entry.status==='restored'?'RotateCcw':'History'}/></span><div><div className="history-title"><strong>{entry.names.length===1?entry.names[0]:`${entry.names.length} settings changed`}</strong><Badge tone={['prepared','recovery-needed'].includes(entry.status)?'gold':'neutral'}>{entry.status.replaceAll('-',' ')}</Badge></div><p>{entry.names.join(' · ')}</p><span className="small muted">{dateText(entry.date)}{entry.restoredAt?` · Restored ${dateText(entry.restoredAt)}`:''}</span>{entry.error&&<p className="error-text">{entry.error}</p>}</div>{entry.restorable===false?<Badge tone="gold">No in-app undo</Badge>:activeHistory.at(-1)?.id===entry.id?<Button variant="secondary" onClick={()=>setRestoring(entry.id)}><Icon name="RotateCcw" size={15}/>Restore</Button>:entry.status==='applied'?<span className="small muted">Restore newer changes first</span>:null}</div>)}</div>:<Empty icon="History" title="Your clean slate starts here" action={<Button variant="secondary" onClick={()=>setPage('Tweaks')}>Explore tweaks<Icon name="ArrowRight" size={16}/></Button>}>Your changes and backups will appear here after applying a tweak.</Empty>}</section></>}
 

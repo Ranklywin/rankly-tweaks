@@ -18,7 +18,24 @@ export function operationKey(o) {
   throw new Error('Unknown setting type.');
 }
 
+// Several controls can own tokens in one semicolon-list value. Writing them as
+// separate operations would let the second write discard the first, so tokens
+// for the same value are combined into one read, backup, and write.
+function mergeSharedPreferences(operations) {
+  const merged=[];
+  for(const o of operations) {
+    const prior=o.type==='registry'&&o.transform==='semicolon'&&merged.find(m=>m.type==='registry'&&m.transform==='semicolon'&&m.path===o.path&&m.name===o.name);
+    if(prior) prior.value=[...String(prior.value).split(';'),...String(o.value).split(';')].filter(Boolean).join(';')+';';
+    else merged.push(o.transform==='semicolon'?{...o}:o);
+  }
+  return merged;
+}
+
 export function operationsFor(selected,context={}) {
+  return mergeSharedPreferences(rawOperationsFor(selected,context));
+}
+
+function rawOperationsFor(selected,context) {
   const scheme=selected.find(t=>t.power)?.power||context.scheme;
   return selected.flatMap(t=>{
     if(t.wifiSetting) {
@@ -60,6 +77,7 @@ export function unavailableReason(t,context) {
   if(t.hardware==='onedrive'&&!context.onedrive) return 'OneDrive was not detected';
   if(t.services&&!operationsFor([t],context).length) return 'No available optional services';
   if(t.hardware==='hags'&&!context.hags) return 'GPU scheduling support was not detected';
+  if(t.hardware==='vrr'&&!context.vrr) return 'Requires a WDDM 2.6 or newer graphics driver';
   if(t.hardware==='wifi'&&!context.wifi) return 'No Wi-Fi adapter detected';
   if(t.hardware==='hdd'&&!context.hdd) return 'No mechanical hard drive detected';
   if(t.hardware==='nvme'&&!context.nvme) return 'No active Microsoft NVMe storage controller detected';

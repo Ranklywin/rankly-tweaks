@@ -58,3 +58,26 @@
 .sidebar-socials a:hover{border-color:var(--mint);background:var(--mint-soft);color:var(--mint)}
 @media(max-width:960px){.sidebar-socials{gap:8px}.sidebar-socials a{width:32px;height:32px}}
 @media(max-width:700px){.sidebar-socials{flex-direction:column;align-items:center;padding:10px 0 0}}
+
+/* Performance checkup and mouse polling test. */
+.checkup-panel{margin-top:21px}
+.checkup-item{display:flex;align-items:flex-start;gap:14px;border-top:1px solid var(--border);padding:16px 0}
+.checkup-item:first-child{margin-top:18px}
+.checkup-item:last-child{padding-bottom:0}
+.checkup-item>div{flex:1;min-width:0}
+.checkup-item strong{font-size:10px;font-weight:500;display:block}
+.checkup-item p{font-size:9px;line-height:1.8;color:var(--muted);margin:4px 0 0;max-width:780px}
+.checkup-item.ok p{color:var(--subtle)}
+.checkup-item>.button{flex-shrink:0;align-self:center}
+.polling-pad{margin:20px 0 4px;padding:22px 16px;border:1px dashed var(--border);border-radius:10px;background:var(--surface-2);display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;transition:border-color .2s}
+.polling-pad .network-illustration{background:radial-gradient(var(--purple-soft),transparent);color:var(--purple)}
+.polling-pad strong{font-size:12px;font-weight:500}
+.polling-pad>span:last-child{font-size:9px;color:var(--muted)}
+.polling-pad.waiting,.polling-pad.measuring{border-color:var(--purple)}
+.polling-scale{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin:28px 0 18px}
+.polling-scale>div{border:1px solid var(--border);border-radius:8px;padding:10px 12px;display:flex;flex-direction:column;gap:4px;background:var(--surface-2)}
+.polling-scale strong{font-size:12px;font-weight:500}
+.polling-scale small,.polling-scale span{font-size:8px;color:var(--muted);font-weight:400}
+.polling-scale .active{border-color:var(--mint);background:var(--mint-soft)}
+.polling-scale .active strong{color:var(--mint)}
+@media(max-width:700px){.checkup-item{flex-wrap:wrap}.checkup-item>.button{margin-left:50px}.polling-scale{grid-template-columns:repeat(3,minmax(0,1fr))}}

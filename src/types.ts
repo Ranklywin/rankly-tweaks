@@ -7,7 +7,9 @@ export interface SystemInfo {
 }
 export interface TweakState { pending?:boolean; label?:string; enabled:boolean; available:boolean; reason?:string; current:{exists?:boolean;value?:unknown}[] }
 export interface HistoryEntry { id: string; date: string; ids: string[]; names: string[]; status: string; restorable?:boolean; restoredAt?: string; error?: string }
-export interface Status { system: SystemInfo|null; states: Record<string,TweakState>; history?: HistoryEntry[]; errors?: string[] }
+export interface CheckupFinding { id:string; state:'warn'|'ok'; icon:string; title:string; detail:string; guide?:string; action?:string }
+export interface Checkup { findings:CheckupFinding[]; checkedAt:string|null }
+export interface Status { system: SystemInfo|null; states: Record<string,TweakState>; history?: HistoryEntry[]; checkup?: Checkup|null; errors?: string[] }
 export interface NetworkResult { target: string; testedAt: string; samples: (number|null)[] }
 export interface SessionApp { token:string; name:string; processCount:number; memoryMB:number }
 export interface CloseAppsResult { closedProcesses:number; skippedProcesses:number; failedProcesses:number }

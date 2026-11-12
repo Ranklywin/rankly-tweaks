@@ -23,8 +23,9 @@ app.whenReady().then(async () => {
     try { const data=await fn(...args); if(process.argv.includes('--diagnostics')) console.log(`[Rankly] ${channel}: success`); return { ok: true, data }; } catch (e) { if(process.argv.includes('--diagnostics')) console.error(`[Rankly] ${channel}: ${e.message}`); return { ok: false, error: e.message || 'The operation could not be completed.' }; }
   });
   handle('status', async () => {
-    const [system,states,history]=await Promise.allSettled([native.getSystem(true),native.scanSettings(),engine.history()]);
-    return {system:system.status==='fulfilled'?system.value:null,states:states.status==='fulfilled'?states.value:{},history:history.status==='fulfilled'?history.value:[],errors:[system,states,history].filter(r=>r.status==='rejected').map(r=>r.reason.message)};
+    const [system,states,history,checkup]=await Promise.allSettled([native.getSystem(true),native.scanSettings(),engine.history(),native.getCheckup()]);
+    // A failed checkup leaves the rest of the scan usable; the panel shows it as unavailable.
+    return {system:system.status==='fulfilled'?system.value:null,states:states.status==='fulfilled'?states.value:{},history:history.status==='fulfilled'?history.value:[],checkup:checkup.status==='fulfilled'?checkup.value:null,errors:[system,states,history].filter(r=>r.status==='rejected').map(r=>r.reason.message)};
   });
   handle('session-apps', () => sessionApps.scan());
   handle('close-apps', tokens => {if(engine.busy)throw new Error('Wait for your settings change to finish.');return sessionApps.close(tokens);});
@@ -37,8 +38,8 @@ app.whenReady().then(async () => {
   handle('export', async () => {
     const { canceled, filePath } = await dialog.showSaveDialog(window, { title: 'Export your Rankly report', defaultPath: 'Rankly-system-report.json', filters:[{ name:'JSON report', extensions:['json'] }] });
     if(canceled || !filePath) return null;
-    const [system, states, history]=await Promise.all([native.getSystem(), native.scanSettings(), engine.history()]);
-    await fs.writeFile(filePath, JSON.stringify({ version:1, exportedAt:new Date().toISOString(), system, states, history },null,2),'utf8');
+    const [system, states, history, checkup]=await Promise.all([native.getSystem(), native.scanSettings(), engine.history(), native.getCheckup().catch(()=>null)]);
+    await fs.writeFile(filePath, JSON.stringify({ version:1, exportedAt:new Date().toISOString(), system, states, history, checkup },null,2),'utf8');
     return path.basename(filePath);
   });
   handle('window', action => { if(action==='minimize') window.minimize(); else if(action==='maximize') window.isMaximized()?window.unmaximize():window.maximize(); else if(action==='close') window.close(); else throw new Error('Unknown window action.'); });

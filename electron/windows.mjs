@@ -12,6 +12,8 @@ import { getCapabilities } from './capabilities.mjs';
 import { keyboardReadPrelude } from './keyboard-scripts.mjs';
 import { validShortcutValue } from '../shared/keyboard-settings.mjs';
 import { wifiReadPrelude, wifiWriteScript } from './wifi-scripts.mjs';
+import { checkupScript } from './checkup-scripts.mjs';
+import { evaluateCheckup } from '../shared/checkup.mjs';
 export { operationsFor, equalOperations } from '../shared/operations.mjs';
 
 const powershell = path.join(process.env.SystemRoot || 'C:\\Windows', 'System32', 'WindowsPowerShell', 'v1.0', 'powershell.exe');
@@ -136,6 +138,8 @@ $active = (& powercfg.exe /getactivescheme | Out-String).Trim()
   const value = { ...detected, platform: os.platform(), appVersion: APP_VERSION };
   systemCache = { value, at: Date.now() }; return value;
 }
+// Read-only: reports setup problems such as a low refresh rate or base-speed memory.
+export async function getCheckup() { return evaluateCheckup(await runPowerShell(checkupScript, 30000)); }
 export async function pingNetwork(target) {
   const allowed = { cloudflare: '1.1.1.1', google: '8.8.8.8', quad9: '9.9.9.9' };
   if (!Object.hasOwn(allowed, target)) throw new Error('Choose one of the available test endpoints.');
