@@ -1,0 +1,235 @@
+{
+  "journal": "[\n  {\n    \"format\": 2,\n    \"id\": \"3c15419e-96f9-48b5-8a93-29d48d17a9bb\",\n    \"date\": \"2026-11-12T21:41:39.743Z\",\n    \"ids\": [\n      \"windows-cleanup\",\n      \"mouse-acceleration\"\n    ],\n    \"names\": [\n      \"Windows cleanup\",\n      \"Raw mouse feel\"\n    ],\n    \"before\": [\n      {\n        \"type\": \"registry\",\n        \"path\": \"HKCU:\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\AdvertisingInfo\",\n        \"name\": \"Enabled\",\n        \"exists\": false\n      },\n      {\n        \"type\": \"registry\",\n        \"path\": \"HKCU:\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Privacy\",\n        \"name\": \"TailoredExperiencesWithDiagnosticDataEnabled\",\n        \"exists\": false\n      },\n      {\n        \"type\": \"registry\",\n        \"path\": \"HKCU:\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\ContentDeliveryManager\",\n        \"name\": \"SubscribedContent-338389Enabled\",\n        \"exists\": false\n      },\n      {\n        \"type\": \"registry\",\n        \"path\": \"HKCU:\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\ContentDeliveryManager\",\n        \"name\": \"SubscribedContent-310093Enabled\",\n        \"exists\": false\n      },\n      {\n        \"type\": \"registry\",\n        \"path\": \"HKCU:\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\ContentDeliveryManager\",\n        \"name\": \"SubscribedContent-338393Enabled\",\n        \"exists\": false\n      },\n      {\n        \"type\": \"registry\",\n        \"path\": \"HKCU:\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\ContentDeliveryManager\",\n        \"name\": \"SubscribedContent-353694Enabled\",\n        \"exists\": false\n      },\n      {\n        \"type\": \"registry\",\n        \"path\": \"HKCU:\\\\Control Panel\\\\Mouse\",\n        \"name\": \"MouseSpeed\",\n        \"exists\": true,\n        \"kind\": \"String\",\n        \"value\": \"1\"\n      },\n      {\n        \"type\": \"registry\",\n        \"path\": \"HKCU:\\\\Control Panel\\\\Mouse\",\n        \"name\": \"MouseThreshold1\",\n        \"exists\": false\n      },\n      {\n        \"type\": \"registry\",\n        \"path\": \"HKCU:\\\\Control Panel\\\\Mouse\",\n        \"name\": \"MouseThreshold2\",\n        \"exists\": false\n      }\n    ],\n    \"after\": [\n      {\n        \"type\": \"registry\",\n        \"path\": \"HKCU:\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\AdvertisingInfo\",\n        \"name\": \"Enabled\",\n        \"value\": 0,\n        \"kind\": \"DWord\",\n        \"exists\": true\n      },\n      {\n        \"type\": \"registry\",\n        \"path\": \"HKCU:\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\Privacy\",\n        \"name\": \"TailoredExperiencesWithDiagnosticDataEnabled\",\n        \"value\": 0,\n        \"kind\": \"DWord\",\n        \"exists\": true\n      },\n      {\n        \"type\": \"registry\",\n        \"path\": \"HKCU:\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\ContentDeliveryManager\",\n        \"name\": \"SubscribedContent-338389Enabled\",\n        \"value\": 0,\n        \"kind\": \"DWord\",\n        \"exists\": true\n      },\n      {\n        \"type\": \"registry\",\n        \"path\": \"HKCU:\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\ContentDeliveryManager\",\n        \"name\": \"SubscribedContent-310093Enabled\",\n        \"value\": 0,\n        \"kind\": \"DWord\",\n        \"exists\": true\n      },\n      {\n        \"type\": \"registry\",\n        \"path\": \"HKCU:\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\ContentDeliveryManager\",\n        \"name\": \"SubscribedContent-338393Enabled\",\n        \"value\": 0,\n        \"kind\": \"DWord\",\n        \"exists\": true\n      },\n      {\n        \"type\": \"registry\",\n        \"path\": \"HKCU:\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\ContentDeliveryManager\",\n        \"name\": \"SubscribedContent-353694Enabled\",\n        \"value\": 0,\n        \"kind\": \"DWord\",\n        \"exists\": true\n      },\n      {\n        \"type\": \"registry\",\n        \"path\": \"HKCU:\\\\Control Panel\\\\Mouse\",\n        \"name\": \"MouseSpeed\",\n        \"value\": \"0\",\n        \"kind\": \"String\",\n        \"exists\": true\n      },\n      {\n        \"type\": \"registry\",\n        \"path\": \"HKCU:\\\\Control Panel\\\\Mouse\",\n        \"name\": \"MouseThreshold1\",\n        \"value\": \"0\",\n        \"kind\": \"String\",\n        \"exists\": true\n      },\n      {\n        \"type\": \"registry\",\n        \"path\": \"HKCU:\\\\Control Panel\\\\Mouse\",\n        \"name\": \"MouseThreshold2\",\n        \"value\": \"0\",\n        \"kind\": \"String\",\n        \"exists\": true\n      }\n    ],\n    \"status\": \"applied\"\n  },\n  {\n    \"format\": 2,\n    \"id\": \"a68e3d72-432e-4146-8109-17c05a44eec4\",\n    \"date\": \"2026-11-12T21:41:39.753Z\",\n    \"ids\": [\n      \"lean-services\"\n    ],\n    \"names\": [\n      \"Lean Windows services\"\n    ],\n    \"before\": [\n      {\n        \"type\": \"service\",\n        \"name\": \"WSearch\",\n        \"value\": {\n          \"startup\": 2,\n          \"running\": true,\n          \"delayed\": {\n            \"exists\": true,\n            \"kind\": \"DWord\",\n            \"value\": 1\n          }\n        }\n      },\n      {\n        \"type\": \"service\",\n        \"name\": \"SysMain\",\n        \"value\": {\n          \"startup\": 2,\n          \"running\": true,\n          \"delayed\": {\n            \"exists\": false\n          }\n        }\n      },\n      {\n        \"type\": \"service\",\n        \"name\": \"DiagTrack\",\n        \"value\": {\n          \"startup\": 3,\n          \"running\": false,\n          \"delayed\": {\n            \"exists\": false\n          }\n        }\n      }\n    ],\n    \"after\": [\n      {\n        \"type\": \"service\",\n        \"name\": \"WSearch\",\n        \"value\": {\n          \"startup\": 4,\n          \"running\": false,\n          \"delayed\": {\n            \"exists\": true,\n            \"kind\": \"DWord\",\n            \"value\": 1\n          }\n        }\n      },\n      {\n        \"type\": \"service\",\n        \"name\": \"SysMain\",\n        \"value\": {\n          \"startup\": 4,\n          \"running\": false,\n          \"delayed\": {\n            \"exists\": false\n          }\n        }\n      },\n      {\n        \"type\": \"service\",\n        \"name\": \"DiagTrack\",\n        \"value\": {\n          \"startup\": 4,\n          \"running\": false,\n          \"delayed\": {\n            \"exists\": false\n          }\n        }\n      }\n    ],\n    \"status\": \"applied\"\n  },\n  {\n    \"format\": 2,\n    \"id\": \"6a256130-3f29-48ce-ba25-2e18305cd86a\",\n    \"date\": \"2026-11-12T21:41:39.757Z\",\n    \"ids\": [\n      \"performance-power\"\n    ],\n    \"names\": [\n      \"Performance power\"\n    ],\n    \"before\": [\n      {\n        \"type\": \"power-setting\",\n        \"scheme\": \"381b4222-f694-41f0-9685-ff5bb260df2e\",\n        \"subgroup\": \"54533251-82be-4824-96c1-47b60b740d00\",\n        \"setting\": \"be337238-0d82-4146-a960-4f3749d470c7\",\n        \"value\": 1\n      },\n      {\n        \"type\": \"power-setting\",\n        \"scheme\": \"381b4222-f694-41f0-9685-ff5bb260df2e\",\n        \"subgroup\": \"54533251-82be-4824-96c1-47b60b740d00\",\n        \"setting\": \"36687f9e-e3a5-4dbf-b1dc-15eb381c6863\",\n        \"value\": 1\n      },\n      {\n        \"type\": \"power-setting\",\n        \"scheme\": \"381b4222-f694-41f0-9685-ff5bb260df2e\",\n        \"subgroup\": \"54533251-82be-4824-96c1-47b60b740d00\",\n        \"setting\": \"bc5038f7-23e0-4960-96da-33abaf5935ec\",\n        \"value\": 1\n      },\n      {\n        \"type\": \"power-setting\",\n        \"scheme\": \"381b4222-f694-41f0-9685-ff5bb260df2e\",\n        \"subgroup\": \"501a4d13-42af-4429-9fd1-a8218c268e20\",\n        \"setting\": \"ee12f906-d277-404b-b6da-e5fa1a576df5\",\n        \"value\": 1\n      }\n    ],\n    \"after\": [\n      {\n        \"type\": \"power-setting\",\n        \"scheme\": \"381b4222-f694-41f0-9685-ff5bb260df2e\",\n        \"subgroup\": \"54533251-82be-4824-96c1-47b60b740d00\",\n        \"setting\": \"be337238-0d82-4146-a960-4f3749d470c7\",\n        \"value\": 2\n      },\n      {\n        \"type\": \"power-setting\",\n        \"scheme\": \"381b4222-f694-41f0-9685-ff5bb260df2e\",\n        \"subgroup\": \"54533251-82be-4824-96c1-47b60b740d00\",\n        \"setting\": \"36687f9e-e3a5-4dbf-b1dc-15eb381c6863\",\n        \"value\": 0\n      },\n      {\n        \"type\": \"power-setting\",\n        \"scheme\": \"381b4222-f694-41f0-9685-ff5bb260df2e\",\n        \"subgroup\": \"54533251-82be-4824-96c1-47b60b740d00\",\n        \"setting\": \"bc5038f7-23e0-4960-96da-33abaf5935ec\",\n        \"value\": 100\n      },\n      {\n        \"type\": \"power-setting\",\n        \"scheme\": \"381b4222-f694-41f0-9685-ff5bb260df2e\",\n        \"subgroup\": \"501a4d13-42af-4429-9fd1-a8218c268e20\",\n        \"setting\": \"ee12f906-d277-404b-b6da-e5fa1a576df5\",\n        \"value\": 0\n      }\n    ],\n    \"status\": \"applied\"\n  },\n  {\n    \"format\": 2,\n    \"id\": \"11bd75e0-f886-40de-a38d-afe8b39cc98a\",\n    \"date\": \"2026-11-12T21:41:39.763Z\",\n    \"ids\": [\n      \"windowed-gaming\",\n      \"windowed-vrr\"\n    ],\n    \"names\": [\n      \"Windowed game optimization\",\n      \"Variable refresh for more games\"\n    ],\n    \"before\": [\n      {\n        \"type\": \"registry\",\n        \"path\": \"HKCU:\\\\Software\\\\Microsoft\\\\DirectX\\\\UserGpuPreferences\",\n        \"name\": \"DirectXUserGlobalSettings\",\n        \"exists\": true,\n        \"kind\": \"String\",\n        \"value\": \"AutoHDREnable=1;\"\n      }\n    ],\n    \"after\": [\n      {\n        \"type\": \"registry\",\n        \"path\": \"HKCU:\\\\Software\\\\Microsoft\\\\DirectX\\\\UserGpuPreferences\",\n        \"name\": \"DirectXUserGlobalSettings\",\n        \"value\": \"AutoHDREnable=1;SwapEffectUpgradeEnable=1;VRROptimizeEnable=1;\",\n        \"kind\": \"String\",\n        \"exists\": true\n      }\n    ],\n    \"status\": \"applied\"\n  },\n  {\n    \"format\": 2,\n    \"id\": \"82986134-4c67-4b37-bb85-422e0437af06\",\n    \"date\": \"2026-11-12T21:41:39.767Z\",\n    \"ids\": [\n      \"gaming-optimization\"\n    ],\n    \"names\": [\n      \"Gaming optimization\"\n    ],\n    \"before\": [\n      {\n        \"type\": \"registry\",\n        \"path\": \"HKCU:\\\\Software\\\\Microsoft\\\\GameBar\",\n        \"name\": \"AllowAutoGameMode\",\n        \"exists\": false\n      },\n      {\n        \"type\": \"registry\",\n        \"path\": \"HKCU:\\\\Software\\\\Microsoft\\\\GameBar\",\n        \"name\": \"AutoGameModeEnabled\",\n        \"exists\": false\n      },\n      {\n        \"type\": \"registry\",\n        \"path\": \"HKCU:\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\GameDVR\",\n        \"name\": \"AppCaptureEnabled\",\n        \"exists\": false\n      },\n      {\n        \"type\": \"registry\",\n        \"path\": \"HKCU:\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\GameDVR\",\n        \"name\": \"HistoricalCaptureEnabled\",\n        \"exists\": false\n      },\n      {\n        \"type\": \"registry\",\n        \"path\": \"HKCU:\\\\System\\\\GameConfigStore\",\n        \"name\": \"GameDVR_Enabled\",\n        \"exists\": false\n      }\n    ],\n    \"after\": [\n      {\n        \"type\": \"registry\",\n        \"path\": \"HKCU:\\\\Software\\\\Microsoft\\\\GameBar\",\n        \"name\": \"AllowAutoGameMode\",\n        \"value\": 1,\n        \"kind\": \"DWord\",\n        \"exists\": true\n      },\n      {\n        \"type\": \"registry\",\n        \"path\": \"HKCU:\\\\Software\\\\Microsoft\\\\GameBar\",\n        \"name\": \"AutoGameModeEnabled\",\n        \"value\": 1,\n        \"kind\": \"DWord\",\n        \"exists\": true\n      },\n      {\n        \"type\": \"registry\",\n        \"path\": \"HKCU:\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\GameDVR\",\n        \"name\": \"AppCaptureEnabled\",\n        \"value\": 0,\n        \"kind\": \"DWord\",\n        \"exists\": true\n      },\n      {\n        \"type\": \"registry\",\n        \"path\": \"HKCU:\\\\Software\\\\Microsoft\\\\Windows\\\\CurrentVersion\\\\GameDVR\",\n        \"name\": \"HistoricalCaptureEnabled\",\n        \"value\": 0,\n        \"kind\": \"DWord\",\n        \"exists\": true\n      },\n      {\n        \"type\": \"registry\",\n        \"path\": \"HKCU:\\\\System\\\\GameConfigStore\",\n        \"name\": \"GameDVR_Enabled\",\n        \"value\": 0,\n        \"kind\": \"DWord\",\n        \"exists\": true\n      }\n    ],\n    \"status\": \"restored\",\n    \"restoredAt\": \"2026-11-12T21:41:39.772Z\"\n  }\n]",
+  "initial": [
+    {
+      "type": "service",
+      "name": "WSearch",
+      "value": {
+        "startup": 2,
+        "running": true,
+        "delayed": {
+          "exists": true,
+          "kind": "DWord",
+          "value": 1
+        }
+      }
+    },
+    {
+      "type": "service",
+      "name": "SysMain",
+      "value": {
+        "startup": 2,
+        "running": true,
+        "delayed": {
+          "exists": false
+        }
+      }
+    },
+    {
+      "type": "service",
+      "name": "DiagTrack",
+      "value": {
+        "startup": 3,
+        "running": false,
+        "delayed": {
+          "exists": false
+        }
+      }
+    },
+    {
+      "type": "power-setting",
+      "scheme": "381b4222-f694-41f0-9685-ff5bb260df2e",
+      "subgroup": "54533251-82be-4824-96c1-47b60b740d00",
+      "setting": "be337238-0d82-4146-a960-4f3749d470c7",
+      "value": 1
+    },
+    {
+      "type": "power-setting",
+      "scheme": "381b4222-f694-41f0-9685-ff5bb260df2e",
+      "subgroup": "54533251-82be-4824-96c1-47b60b740d00",
+      "setting": "36687f9e-e3a5-4dbf-b1dc-15eb381c6863",
+      "value": 1
+    },
+    {
+      "type": "power-setting",
+      "scheme": "381b4222-f694-41f0-9685-ff5bb260df2e",
+      "subgroup": "54533251-82be-4824-96c1-47b60b740d00",
+      "setting": "bc5038f7-23e0-4960-96da-33abaf5935ec",
+      "value": 1
+    },
+    {
+      "type": "power-setting",
+      "scheme": "381b4222-f694-41f0-9685-ff5bb260df2e",
+      "subgroup": "501a4d13-42af-4429-9fd1-a8218c268e20",
+      "setting": "ee12f906-d277-404b-b6da-e5fa1a576df5",
+      "value": 1
+    },
+    {
+      "type": "registry",
+      "path": "HKCU:\\Control Panel\\Mouse",
+      "name": "MouseSpeed",
+      "exists": true,
+      "kind": "String",
+      "value": "1"
+    },
+    {
+      "type": "registry",
+      "path": "HKCU:\\Software\\Microsoft\\DirectX\\UserGpuPreferences",
+      "name": "DirectXUserGlobalSettings",
+      "exists": true,
+      "kind": "String",
+      "value": "AutoHDREnable=1;"
+    }
+  ],
+  "state": [
+    {
+      "type": "service",
+      "name": "WSearch",
+      "value": {
+        "startup": 4,
+        "running": false,
+        "delayed": {
+          "exists": true,
+          "kind": "DWord",
+          "value": 1
+        }
+      }
+    },
+    {
+      "type": "service",
+      "name": "SysMain",
+      "value": {
+        "startup": 4,
+        "running": false,
+        "delayed": {
+          "exists": false
+        }
+      }
+    },
+    {
+      "type": "service",
+      "name": "DiagTrack",
+      "value": {
+        "startup": 4,
+        "running": false,
+        "delayed": {
+          "exists": false
+        }
+      }
+    },
+    {
+      "type": "power-setting",
+      "scheme": "381b4222-f694-41f0-9685-ff5bb260df2e",
+      "subgroup": "54533251-82be-4824-96c1-47b60b740d00",
+      "setting": "be337238-0d82-4146-a960-4f3749d470c7",
+      "value": 2
+    },
+    {
+      "type": "power-setting",
+      "scheme": "381b4222-f694-41f0-9685-ff5bb260df2e",
+      "subgroup": "54533251-82be-4824-96c1-47b60b740d00",
+      "setting": "36687f9e-e3a5-4dbf-b1dc-15eb381c6863",
+      "value": 0
+    },
+    {
+      "type": "power-setting",
+      "scheme": "381b4222-f694-41f0-9685-ff5bb260df2e",
+      "subgroup": "54533251-82be-4824-96c1-47b60b740d00",
+      "setting": "bc5038f7-23e0-4960-96da-33abaf5935ec",
+      "value": 100
+    },
+    {
+      "type": "power-setting",
+      "scheme": "381b4222-f694-41f0-9685-ff5bb260df2e",
+      "subgroup": "501a4d13-42af-4429-9fd1-a8218c268e20",
+      "setting": "ee12f906-d277-404b-b6da-e5fa1a576df5",
+      "value": 0
+    },
+    {
+      "type": "registry",
+      "path": "HKCU:\\Control Panel\\Mouse",
+      "name": "MouseSpeed",
+      "value": "0",
+      "kind": "String",
+      "exists": true
+    },
+    {
+      "type": "registry",
+      "path": "HKCU:\\Software\\Microsoft\\DirectX\\UserGpuPreferences",
+      "name": "DirectXUserGlobalSettings",
+      "value": "AutoHDREnable=1;SwapEffectUpgradeEnable=1;VRROptimizeEnable=1;",
+      "kind": "String",
+      "exists": true
+    },
+    {
+      "type": "registry",
+      "path": "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\AdvertisingInfo",
+      "name": "Enabled",
+      "value": 0,
+      "kind": "DWord",
+      "exists": true
+    },
+    {
+      "type": "registry",
+      "path": "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Privacy",
+      "name": "TailoredExperiencesWithDiagnosticDataEnabled",
+      "value": 0,
+      "kind": "DWord",
+      "exists": true
+    },
+    {
+      "type": "registry",
+      "path": "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+      "name": "SubscribedContent-338389Enabled",
+      "value": 0,
+      "kind": "DWord",
+      "exists": true
+    },
+    {
+      "type": "registry",
+      "path": "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+      "name": "SubscribedContent-310093Enabled",
+      "value": 0,
+      "kind": "DWord",
+      "exists": true
+    },
+    {
+      "type": "registry",
+      "path": "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+      "name": "SubscribedContent-338393Enabled",
+      "value": 0,
+      "kind": "DWord",
+      "exists": true
+    },
+    {
+      "type": "registry",
+      "path": "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+      "name": "SubscribedContent-353694Enabled",
+      "value": 0,
+      "kind": "DWord",
+      "exists": true
+    },
+    {
+      "type": "registry",
+      "path": "HKCU:\\Control Panel\\Mouse",
+      "name": "MouseThreshold1",
+      "value": "0",
+      "kind": "String",
+      "exists": true
+    },
+    {
+      "type": "registry",
+      "path": "HKCU:\\Control Panel\\Mouse",
+      "name": "MouseThreshold2",
+      "value": "0",
+      "kind": "String",
+      "exists": true
+    }
+  ],
+  "restoreOrder": [
+    "11bd75e0-f886-40de-a38d-afe8b39cc98a",
+    "6a256130-3f29-48ce-ba25-2e18305cd86a",
+    "a68e3d72-432e-4146-8109-17c05a44eec4",
+    "3c15419e-96f9-48b5-8a93-29d48d17a9bb"
+  ]
+}

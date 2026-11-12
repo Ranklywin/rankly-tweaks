@@ -12,14 +12,14 @@ copyright and license texts are preserved in the linked files.
 | lucide-react | 0.562.0 | ISC | [License](licenses/lucide-react.txt) |
 | @fontsource/poppins | 5.2.7 | OFL-1.1 | [License](licenses/fontsource-poppins.txt) |
 
-The Windows executable also includes Electron 44.3.0 and its Chromium,
-Node.js, and other runtime components. Electron's original LICENSE.electron.txt
-and LICENSES.chromium.html are retained beside the extracted executable.
-The portable launcher contains that complete runtime distribution.
+The Windows executable is built with Tauri 2.12.5 and 274 Rust crates.
+Their names, versions, licenses, and full license texts are listed in
+[licenses/rust-crates.txt](licenses/rust-crates.txt). The interface runs in the
+Microsoft Edge WebView2 runtime provided by Windows; it is not bundled.
 
-The project license, this notice, and the licenses directory are also included
-in the portable distribution. Build tools are development dependencies; their
-license metadata remains available through package-lock.json and npm.
+The project license, this notice, and the licenses directory are also installed
+with the app. Build tools are development dependencies; their license metadata
+remains available through package-lock.json, Cargo.lock, npm, and cargo.
 
-Regenerate this file and the frontend license copies with npm run notices:update
-after changing bundled dependencies. npm run check:release checks these copies.
+Regenerate this file and the license copies with npm run notices:update after
+changing bundled dependencies. npm run check:release checks these copies.

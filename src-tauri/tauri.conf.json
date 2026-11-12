@@ -1,0 +1,73 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Rankly Tweaks",
+  "version": "../package.json",
+  "identifier": "gg.rankly.tweaks",
+  "build": {
+    "frontendDist": "../dist",
+    "devUrl": "http://127.0.0.1:5178",
+    "beforeDevCommand": "npm run dev",
+    "beforeBuildCommand": "npm run build"
+  },
+  "app": {
+    "windows": [
+      {
+        "label": "main",
+        "title": "Rankly Tweaks",
+        "width": 1440,
+        "height": 940,
+        "minWidth": 960,
+        "minHeight": 680,
+        "center": true,
+        "decorations": false,
+        "backgroundColor": "#0f1116"
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self' ipc: http://ipc.localhost; object-src 'none'; base-uri 'self'; form-action 'none'"
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": [
+      "nsis"
+    ],
+    "publisher": "Rankly",
+    "copyright": "Copyright (c) Rankly. MIT license.",
+    "license": "MIT",
+    "licenseFile": "../LICENSE",
+    "category": "Utility",
+    "shortDescription": "Windows gaming controls with verified recovery.",
+    "createUpdaterArtifacts": true,
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.ico"
+    ],
+    "resources": {
+      "../THIRD_PARTY_NOTICES.md": "THIRD_PARTY_NOTICES.md",
+      "../licenses/": "licenses/"
+    },
+    "windows": {
+      "webviewInstallMode": {
+        "type": "downloadBootstrapper"
+      },
+      "nsis": {
+        "installMode": "perMachine",
+        "displayLanguageSelector": false
+      }
+    }
+  },
+  "plugins": {
+    "updater": {
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDQ0RjkwRkMyMzk4QUE0RkYKUldUL3BJbzV3Zy81UkNucXJNcGFIVDlPVjBNaldBUmZFK1kxbjJiYkRQUVdoTGE5bGVLOFR6WlIK",
+      "endpoints": [
+        "https://github.com/Ranklywin/rankly-tweaks/releases/latest/download/latest.json"
+      ],
+      "windows": {
+        "installMode": "passive"
+      }
+    }
+  }
+}

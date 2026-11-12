@@ -10,6 +10,13 @@ assert.equal(lock.packages[''].version, APP_VERSION);
 assert.equal(pkg.license, 'MIT');
 assert.equal(lock.packages[''].license, pkg.license);
 assert.equal(pkg.repository.url, 'https://github.com/ranklywin/rankly-tweaks.git');
+// The Rust crate and Tauri bundle must ship the same version as package.json.
+const cargo = readFileSync('src-tauri/Cargo.toml', 'utf8');
+assert.equal(/^version = "([^"]+)"/m.exec(cargo)?.[1], APP_VERSION, 'src-tauri/Cargo.toml version must match package.json.');
+const tauriConfig = JSON.parse(readFileSync('src-tauri/tauri.conf.json', 'utf8'));
+assert.equal(tauriConfig.version, '../package.json', 'tauri.conf.json must read its version from package.json.');
+assert.match(tauriConfig.plugins.updater.pubkey, /^[A-Za-z0-9+/=]{100,}$/, 'Set the updater public key in tauri.conf.json.');
+assert.ok(readFileSync('src-tauri/Cargo.lock', 'utf8').includes('name = "tauri"'), 'Commit src-tauri/Cargo.lock.');
 const integrityByURL = new Map();
 for (const entry of Object.values(lock.packages)) {
   if (!entry.resolved || !entry.integrity) continue;

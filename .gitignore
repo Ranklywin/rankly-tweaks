@@ -10,3 +10,5 @@ release/
 *.pfx
 *.p12
 *.pem
+src-tauri/target/
+src-tauri/gen/

@@ -1,0 +1,1488 @@
+{
+  "version": "1.1.0",
+  "tweaks": [
+    {
+      "id": "gaming-optimization",
+      "name": "Gaming optimization",
+      "operations": [
+        {
+          "path": "HKCU:\\Software\\Microsoft\\GameBar",
+          "name": "AllowAutoGameMode",
+          "value": 1,
+          "kind": "DWord"
+        },
+        {
+          "path": "HKCU:\\Software\\Microsoft\\GameBar",
+          "name": "AutoGameModeEnabled",
+          "value": 1,
+          "kind": "DWord"
+        },
+        {
+          "path": "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\GameDVR",
+          "name": "AppCaptureEnabled",
+          "value": 0,
+          "kind": "DWord"
+        },
+        {
+          "path": "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\GameDVR",
+          "name": "HistoricalCaptureEnabled",
+          "value": 0,
+          "kind": "DWord"
+        },
+        {
+          "path": "HKCU:\\System\\GameConfigStore",
+          "name": "GameDVR_Enabled",
+          "value": 0,
+          "kind": "DWord"
+        }
+      ]
+    },
+    {
+      "id": "app-notifications",
+      "name": "Quiet app notifications",
+      "admin": true,
+      "minBuild": 19044,
+      "proOnly": true,
+      "operations": [
+        {
+          "path": "HKCU:\\SOFTWARE\\Policies\\Microsoft\\Windows\\CurrentVersion\\PushNotifications",
+          "name": "NoToastApplicationNotification",
+          "value": 1,
+          "kind": "DWord"
+        }
+      ]
+    },
+    {
+      "id": "high-performance",
+      "name": "Gaming power plan",
+      "power": "8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c"
+    },
+    {
+      "id": "mouse-acceleration",
+      "name": "Raw mouse feel",
+      "operations": [
+        {
+          "path": "HKCU:\\Control Panel\\Mouse",
+          "name": "MouseSpeed",
+          "value": "0",
+          "kind": "String"
+        },
+        {
+          "path": "HKCU:\\Control Panel\\Mouse",
+          "name": "MouseThreshold1",
+          "value": "0",
+          "kind": "String"
+        },
+        {
+          "path": "HKCU:\\Control Panel\\Mouse",
+          "name": "MouseThreshold2",
+          "value": "0",
+          "kind": "String"
+        }
+      ]
+    },
+    {
+      "id": "keyboard-shortcuts",
+      "name": "Keyboard shortcut protection",
+      "minBuild": 10240,
+      "keyboardShortcuts": [
+        "sticky",
+        "toggle",
+        "filter"
+      ]
+    },
+    {
+      "id": "performance-power",
+      "name": "Performance power",
+      "admin": true,
+      "powerSettings": [
+        {
+          "subgroup": "54533251-82be-4824-96c1-47b60b740d00",
+          "setting": "be337238-0d82-4146-a960-4f3749d470c7",
+          "value": 2
+        },
+        {
+          "subgroup": "54533251-82be-4824-96c1-47b60b740d00",
+          "setting": "36687f9e-e3a5-4dbf-b1dc-15eb381c6863",
+          "value": 0
+        },
+        {
+          "subgroup": "54533251-82be-4824-96c1-47b60b740d00",
+          "setting": "bc5038f7-23e0-4960-96da-33abaf5935ec",
+          "value": 100
+        },
+        {
+          "subgroup": "501a4d13-42af-4429-9fd1-a8218c268e20",
+          "setting": "ee12f906-d277-404b-b6da-e5fa1a576df5",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "core-parking",
+      "name": "Reduce core parking",
+      "admin": true,
+      "hardware": "non-x3d",
+      "powerSettings": [
+        {
+          "subgroup": "54533251-82be-4824-96c1-47b60b740d00",
+          "setting": "0cc5b647-c1df-4637-891a-dec35c318583",
+          "value": 100
+        }
+      ]
+    },
+    {
+      "id": "active-cooling",
+      "name": "Active cooling preference",
+      "admin": true,
+      "requireAllPowerSettings": true,
+      "powerSettings": [
+        {
+          "subgroup": "54533251-82be-4824-96c1-47b60b740d00",
+          "setting": "94d3a615-a899-4ac5-ae2b-e4d8f634367f",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "nvme-latency",
+      "name": "NVMe low-latency power",
+      "admin": true,
+      "minBuild": 18362,
+      "hardware": "nvme",
+      "requireAllPowerSettings": true,
+      "powerSettings": [
+        {
+          "subgroup": "0012ee47-9041-4b5d-9b77-535fba8b1442",
+          "setting": "fc95af4d-40e7-4b6d-835a-56d131dbc80e",
+          "value": 0
+        },
+        {
+          "subgroup": "0012ee47-9041-4b5d-9b77-535fba8b1442",
+          "setting": "dbc9e238-6de9-49e3-92cd-8c2b4946b472",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "sata-link-power",
+      "name": "SATA link readiness",
+      "admin": true,
+      "hardware": "ahci",
+      "requireAllPowerSettings": true,
+      "powerSettings": [
+        {
+          "subgroup": "0012ee47-9041-4b5d-9b77-535fba8b1442",
+          "setting": "0b2d69d7-a2a1-449c-9680-f91c70521c60",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "gpu-scheduling",
+      "name": "GPU scheduling",
+      "admin": true,
+      "minBuild": 19041,
+      "hardware": "hags",
+      "operations": [
+        {
+          "path": "HKLM:\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers",
+          "name": "HwSchMode",
+          "value": 2,
+          "kind": "DWord"
+        }
+      ]
+    },
+    {
+      "id": "windowed-gaming",
+      "name": "Windowed game optimization",
+      "minBuild": 22621,
+      "operations": [
+        {
+          "path": "HKCU:\\Software\\Microsoft\\DirectX\\UserGpuPreferences",
+          "name": "DirectXUserGlobalSettings",
+          "value": "SwapEffectUpgradeEnable=1;",
+          "kind": "String",
+          "transform": "semicolon"
+        }
+      ]
+    },
+    {
+      "id": "windowed-vrr",
+      "name": "Variable refresh for more games",
+      "minBuild": 18362,
+      "hardware": "vrr",
+      "operations": [
+        {
+          "path": "HKCU:\\Software\\Microsoft\\DirectX\\UserGpuPreferences",
+          "name": "DirectXUserGlobalSettings",
+          "value": "VRROptimizeEnable=1;",
+          "kind": "String",
+          "transform": "semicolon"
+        }
+      ]
+    },
+    {
+      "id": "background-apps",
+      "name": "Background app control",
+      "admin": true,
+      "minBuild": 15063,
+      "proOnly": true,
+      "operations": [
+        {
+          "path": "HKLM:\\SOFTWARE\\Policies\\Microsoft\\Windows\\AppPrivacy",
+          "name": "LetAppsRunInBackground",
+          "value": 2,
+          "kind": "DWord"
+        }
+      ]
+    },
+    {
+      "id": "update-bandwidth",
+      "name": "Update bandwidth control",
+      "admin": true,
+      "minBuild": 19041,
+      "proOnly": true,
+      "operations": [
+        {
+          "path": "HKLM:\\SOFTWARE\\Policies\\Microsoft\\Windows\\DeliveryOptimization",
+          "name": "DOMaxBackgroundDownloadBandwidth",
+          "value": 1024,
+          "kind": "DWord"
+        },
+        {
+          "path": "HKLM:\\SOFTWARE\\Policies\\Microsoft\\Windows\\DeliveryOptimization",
+          "name": "DODownloadMode",
+          "value": 0,
+          "kind": "DWord"
+        }
+      ]
+    },
+    {
+      "id": "ethernet-optimization",
+      "name": "Ethernet optimization",
+      "admin": true,
+      "networkSettings": [
+        {
+          "keyword": "*InterruptModeration",
+          "value": [
+            "0"
+          ]
+        },
+        {
+          "keyword": "*EEE",
+          "value": [
+            "0"
+          ]
+        },
+        {
+          "keyword": "EnableGreenEthernet",
+          "value": [
+            "0"
+          ]
+        },
+        {
+          "keyword": "*RSS",
+          "value": [
+            "1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ethernet-idle-sleep",
+      "name": "Ethernet idle-sleep fix",
+      "admin": true,
+      "networkSettings": [
+        {
+          "keyword": "*SelectiveSuspend",
+          "value": [
+            "0"
+          ],
+          "required": true
+        }
+      ]
+    },
+    {
+      "id": "wifi-performance",
+      "name": "Wi-Fi performance power",
+      "admin": true,
+      "hardware": "wifi",
+      "powerSettings": [
+        {
+          "subgroup": "19cbb8fa-5279-450e-9fac-8a3d5fedd0c1",
+          "setting": "12bbebe6-58d6-4636-95bb-3217ef867c1a",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "wifi-smps",
+      "name": "Wi-Fi antenna power fix",
+      "admin": true,
+      "minBuild": 10240,
+      "wifiSetting": {
+        "keyword": "MIMOPowerSaveMode",
+        "target": "No SMPS"
+      }
+    },
+    {
+      "id": "wifi-uapsd",
+      "name": "Wi-Fi U-APSD compatibility",
+      "admin": true,
+      "minBuild": 10240,
+      "wifiSetting": {
+        "keyword": "uAPSD",
+        "target": "Disabled"
+      }
+    },
+    {
+      "id": "usb-stability",
+      "name": "USB disconnect fix",
+      "admin": true,
+      "powerSettings": [
+        {
+          "subgroup": "2a737441-1930-4402-8d77-b2bebba308a3",
+          "setting": "48e6b7a6-50f5-4782-a5d4-53bb8f07e226",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "stay-awake",
+      "name": "Keep your setup awake",
+      "admin": true,
+      "powerSettings": [
+        {
+          "subgroup": "7516b95f-f776-4464-8c53-06167f40cc99",
+          "setting": "3c0bc021-c8a8-4e07-a973-6b14cbcb2b7e",
+          "value": 0
+        },
+        {
+          "subgroup": "238c9fa8-0aad-41ed-83f4-97be242c8f20",
+          "setting": "29f6c1db-86da-48c5-9fdb-f2b67b1f44da",
+          "value": 0
+        },
+        {
+          "subgroup": "238c9fa8-0aad-41ed-83f4-97be242c8f20",
+          "setting": "9d7815a6-7ee4-497e-8888-515a05f02364",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "hdd-readiness",
+      "name": "Keep game drives ready",
+      "admin": true,
+      "hardware": "hdd",
+      "powerSettings": [
+        {
+          "subgroup": "0012ee47-9041-4b5d-9b77-535fba8b1442",
+          "setting": "6738e2c4-e8a5-4a42-b16a-e040e769756e",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "lean-services",
+      "name": "Lean Windows services",
+      "admin": true,
+      "services": [
+        "WSearch",
+        "SysMain",
+        "DiagTrack"
+      ]
+    },
+    {
+      "id": "browser-background",
+      "name": "Browser background control",
+      "admin": true,
+      "hardware": "browser",
+      "operations": [
+        {
+          "path": "HKLM:\\SOFTWARE\\Policies\\Microsoft\\Edge",
+          "name": "StartupBoostEnabled",
+          "value": 0,
+          "kind": "DWord"
+        },
+        {
+          "path": "HKLM:\\SOFTWARE\\Policies\\Microsoft\\Edge",
+          "name": "BackgroundModeEnabled",
+          "value": 0,
+          "kind": "DWord"
+        },
+        {
+          "path": "HKLM:\\SOFTWARE\\Policies\\Google\\Chrome",
+          "name": "BackgroundModeEnabled",
+          "value": 0,
+          "kind": "DWord"
+        }
+      ]
+    },
+    {
+      "id": "onedrive-off",
+      "name": "OneDrive sync off",
+      "admin": true,
+      "minBuild": 10240,
+      "proOnly": true,
+      "hardware": "onedrive",
+      "operations": [
+        {
+          "path": "HKLM:\\SOFTWARE\\Policies\\Microsoft\\Windows\\OneDrive",
+          "name": "DisableFileSyncNGSC",
+          "value": 1,
+          "kind": "DWord"
+        }
+      ]
+    },
+    {
+      "id": "memory-integrity-off",
+      "name": "Memory Integrity off",
+      "admin": true,
+      "minBuild": 10240,
+      "hardware": "memory-integrity",
+      "operations": [
+        {
+          "path": "HKLM:\\SYSTEM\\CurrentControlSet\\Control\\DeviceGuard\\Scenarios\\HypervisorEnforcedCodeIntegrity",
+          "name": "Enabled",
+          "value": 0,
+          "kind": "DWord"
+        }
+      ]
+    },
+    {
+      "id": "windows-cleanup",
+      "name": "Windows cleanup",
+      "operations": [
+        {
+          "path": "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\AdvertisingInfo",
+          "name": "Enabled",
+          "value": 0,
+          "kind": "DWord"
+        },
+        {
+          "path": "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Privacy",
+          "name": "TailoredExperiencesWithDiagnosticDataEnabled",
+          "value": 0,
+          "kind": "DWord"
+        },
+        {
+          "path": "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "name": "SubscribedContent-338389Enabled",
+          "value": 0,
+          "kind": "DWord"
+        },
+        {
+          "path": "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "name": "SubscribedContent-310093Enabled",
+          "value": 0,
+          "kind": "DWord"
+        },
+        {
+          "path": "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "name": "SubscribedContent-338393Enabled",
+          "value": 0,
+          "kind": "DWord"
+        },
+        {
+          "path": "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "name": "SubscribedContent-353694Enabled",
+          "value": 0,
+          "kind": "DWord"
+        }
+      ]
+    }
+  ],
+  "recoveryTweaks": [
+    {
+      "id": "gaming-optimization",
+      "name": "Gaming optimization",
+      "operations": [
+        {
+          "path": "HKCU:\\Software\\Microsoft\\GameBar",
+          "name": "AllowAutoGameMode",
+          "value": 1,
+          "kind": "DWord"
+        },
+        {
+          "path": "HKCU:\\Software\\Microsoft\\GameBar",
+          "name": "AutoGameModeEnabled",
+          "value": 1,
+          "kind": "DWord"
+        },
+        {
+          "path": "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\GameDVR",
+          "name": "AppCaptureEnabled",
+          "value": 0,
+          "kind": "DWord"
+        },
+        {
+          "path": "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\GameDVR",
+          "name": "HistoricalCaptureEnabled",
+          "value": 0,
+          "kind": "DWord"
+        },
+        {
+          "path": "HKCU:\\System\\GameConfigStore",
+          "name": "GameDVR_Enabled",
+          "value": 0,
+          "kind": "DWord"
+        }
+      ]
+    },
+    {
+      "id": "app-notifications",
+      "name": "Quiet app notifications",
+      "admin": true,
+      "minBuild": 19044,
+      "proOnly": true,
+      "operations": [
+        {
+          "path": "HKCU:\\SOFTWARE\\Policies\\Microsoft\\Windows\\CurrentVersion\\PushNotifications",
+          "name": "NoToastApplicationNotification",
+          "value": 1,
+          "kind": "DWord"
+        }
+      ]
+    },
+    {
+      "id": "high-performance",
+      "name": "Gaming power plan",
+      "power": "8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c"
+    },
+    {
+      "id": "mouse-acceleration",
+      "name": "Raw mouse feel",
+      "operations": [
+        {
+          "path": "HKCU:\\Control Panel\\Mouse",
+          "name": "MouseSpeed",
+          "value": "0",
+          "kind": "String"
+        },
+        {
+          "path": "HKCU:\\Control Panel\\Mouse",
+          "name": "MouseThreshold1",
+          "value": "0",
+          "kind": "String"
+        },
+        {
+          "path": "HKCU:\\Control Panel\\Mouse",
+          "name": "MouseThreshold2",
+          "value": "0",
+          "kind": "String"
+        }
+      ]
+    },
+    {
+      "id": "keyboard-shortcuts",
+      "name": "Keyboard shortcut protection",
+      "minBuild": 10240,
+      "keyboardShortcuts": [
+        "sticky",
+        "toggle",
+        "filter"
+      ]
+    },
+    {
+      "id": "performance-power",
+      "name": "Performance power",
+      "admin": true,
+      "powerSettings": [
+        {
+          "subgroup": "54533251-82be-4824-96c1-47b60b740d00",
+          "setting": "be337238-0d82-4146-a960-4f3749d470c7",
+          "value": 2
+        },
+        {
+          "subgroup": "54533251-82be-4824-96c1-47b60b740d00",
+          "setting": "36687f9e-e3a5-4dbf-b1dc-15eb381c6863",
+          "value": 0
+        },
+        {
+          "subgroup": "54533251-82be-4824-96c1-47b60b740d00",
+          "setting": "bc5038f7-23e0-4960-96da-33abaf5935ec",
+          "value": 100
+        },
+        {
+          "subgroup": "501a4d13-42af-4429-9fd1-a8218c268e20",
+          "setting": "ee12f906-d277-404b-b6da-e5fa1a576df5",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "core-parking",
+      "name": "Reduce core parking",
+      "admin": true,
+      "hardware": "non-x3d",
+      "powerSettings": [
+        {
+          "subgroup": "54533251-82be-4824-96c1-47b60b740d00",
+          "setting": "0cc5b647-c1df-4637-891a-dec35c318583",
+          "value": 100
+        }
+      ]
+    },
+    {
+      "id": "active-cooling",
+      "name": "Active cooling preference",
+      "admin": true,
+      "requireAllPowerSettings": true,
+      "powerSettings": [
+        {
+          "subgroup": "54533251-82be-4824-96c1-47b60b740d00",
+          "setting": "94d3a615-a899-4ac5-ae2b-e4d8f634367f",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "nvme-latency",
+      "name": "NVMe low-latency power",
+      "admin": true,
+      "minBuild": 18362,
+      "hardware": "nvme",
+      "requireAllPowerSettings": true,
+      "powerSettings": [
+        {
+          "subgroup": "0012ee47-9041-4b5d-9b77-535fba8b1442",
+          "setting": "fc95af4d-40e7-4b6d-835a-56d131dbc80e",
+          "value": 0
+        },
+        {
+          "subgroup": "0012ee47-9041-4b5d-9b77-535fba8b1442",
+          "setting": "dbc9e238-6de9-49e3-92cd-8c2b4946b472",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "sata-link-power",
+      "name": "SATA link readiness",
+      "admin": true,
+      "hardware": "ahci",
+      "requireAllPowerSettings": true,
+      "powerSettings": [
+        {
+          "subgroup": "0012ee47-9041-4b5d-9b77-535fba8b1442",
+          "setting": "0b2d69d7-a2a1-449c-9680-f91c70521c60",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "gpu-scheduling",
+      "name": "GPU scheduling",
+      "admin": true,
+      "minBuild": 19041,
+      "hardware": "hags",
+      "operations": [
+        {
+          "path": "HKLM:\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers",
+          "name": "HwSchMode",
+          "value": 2,
+          "kind": "DWord"
+        }
+      ]
+    },
+    {
+      "id": "windowed-gaming",
+      "name": "Windowed game optimization",
+      "minBuild": 22621,
+      "operations": [
+        {
+          "path": "HKCU:\\Software\\Microsoft\\DirectX\\UserGpuPreferences",
+          "name": "DirectXUserGlobalSettings",
+          "value": "SwapEffectUpgradeEnable=1;",
+          "kind": "String",
+          "transform": "semicolon"
+        }
+      ]
+    },
+    {
+      "id": "windowed-vrr",
+      "name": "Variable refresh for more games",
+      "minBuild": 18362,
+      "hardware": "vrr",
+      "operations": [
+        {
+          "path": "HKCU:\\Software\\Microsoft\\DirectX\\UserGpuPreferences",
+          "name": "DirectXUserGlobalSettings",
+          "value": "VRROptimizeEnable=1;",
+          "kind": "String",
+          "transform": "semicolon"
+        }
+      ]
+    },
+    {
+      "id": "background-apps",
+      "name": "Background app control",
+      "admin": true,
+      "minBuild": 15063,
+      "proOnly": true,
+      "operations": [
+        {
+          "path": "HKLM:\\SOFTWARE\\Policies\\Microsoft\\Windows\\AppPrivacy",
+          "name": "LetAppsRunInBackground",
+          "value": 2,
+          "kind": "DWord"
+        }
+      ]
+    },
+    {
+      "id": "update-bandwidth",
+      "name": "Update bandwidth control",
+      "admin": true,
+      "minBuild": 19041,
+      "proOnly": true,
+      "operations": [
+        {
+          "path": "HKLM:\\SOFTWARE\\Policies\\Microsoft\\Windows\\DeliveryOptimization",
+          "name": "DOMaxBackgroundDownloadBandwidth",
+          "value": 1024,
+          "kind": "DWord"
+        },
+        {
+          "path": "HKLM:\\SOFTWARE\\Policies\\Microsoft\\Windows\\DeliveryOptimization",
+          "name": "DODownloadMode",
+          "value": 0,
+          "kind": "DWord"
+        }
+      ]
+    },
+    {
+      "id": "ethernet-optimization",
+      "name": "Ethernet optimization",
+      "admin": true,
+      "networkSettings": [
+        {
+          "keyword": "*InterruptModeration",
+          "value": [
+            "0"
+          ]
+        },
+        {
+          "keyword": "*EEE",
+          "value": [
+            "0"
+          ]
+        },
+        {
+          "keyword": "EnableGreenEthernet",
+          "value": [
+            "0"
+          ]
+        },
+        {
+          "keyword": "*RSS",
+          "value": [
+            "1"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ethernet-idle-sleep",
+      "name": "Ethernet idle-sleep fix",
+      "admin": true,
+      "networkSettings": [
+        {
+          "keyword": "*SelectiveSuspend",
+          "value": [
+            "0"
+          ],
+          "required": true
+        }
+      ]
+    },
+    {
+      "id": "wifi-performance",
+      "name": "Wi-Fi performance power",
+      "admin": true,
+      "hardware": "wifi",
+      "powerSettings": [
+        {
+          "subgroup": "19cbb8fa-5279-450e-9fac-8a3d5fedd0c1",
+          "setting": "12bbebe6-58d6-4636-95bb-3217ef867c1a",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "wifi-smps",
+      "name": "Wi-Fi antenna power fix",
+      "admin": true,
+      "minBuild": 10240,
+      "wifiSetting": {
+        "keyword": "MIMOPowerSaveMode",
+        "target": "No SMPS"
+      }
+    },
+    {
+      "id": "wifi-uapsd",
+      "name": "Wi-Fi U-APSD compatibility",
+      "admin": true,
+      "minBuild": 10240,
+      "wifiSetting": {
+        "keyword": "uAPSD",
+        "target": "Disabled"
+      }
+    },
+    {
+      "id": "usb-stability",
+      "name": "USB disconnect fix",
+      "admin": true,
+      "powerSettings": [
+        {
+          "subgroup": "2a737441-1930-4402-8d77-b2bebba308a3",
+          "setting": "48e6b7a6-50f5-4782-a5d4-53bb8f07e226",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "stay-awake",
+      "name": "Keep your setup awake",
+      "admin": true,
+      "powerSettings": [
+        {
+          "subgroup": "7516b95f-f776-4464-8c53-06167f40cc99",
+          "setting": "3c0bc021-c8a8-4e07-a973-6b14cbcb2b7e",
+          "value": 0
+        },
+        {
+          "subgroup": "238c9fa8-0aad-41ed-83f4-97be242c8f20",
+          "setting": "29f6c1db-86da-48c5-9fdb-f2b67b1f44da",
+          "value": 0
+        },
+        {
+          "subgroup": "238c9fa8-0aad-41ed-83f4-97be242c8f20",
+          "setting": "9d7815a6-7ee4-497e-8888-515a05f02364",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "hdd-readiness",
+      "name": "Keep game drives ready",
+      "admin": true,
+      "hardware": "hdd",
+      "powerSettings": [
+        {
+          "subgroup": "0012ee47-9041-4b5d-9b77-535fba8b1442",
+          "setting": "6738e2c4-e8a5-4a42-b16a-e040e769756e",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "lean-services",
+      "name": "Lean Windows services",
+      "admin": true,
+      "services": [
+        "WSearch",
+        "SysMain",
+        "DiagTrack"
+      ]
+    },
+    {
+      "id": "browser-background",
+      "name": "Browser background control",
+      "admin": true,
+      "hardware": "browser",
+      "operations": [
+        {
+          "path": "HKLM:\\SOFTWARE\\Policies\\Microsoft\\Edge",
+          "name": "StartupBoostEnabled",
+          "value": 0,
+          "kind": "DWord"
+        },
+        {
+          "path": "HKLM:\\SOFTWARE\\Policies\\Microsoft\\Edge",
+          "name": "BackgroundModeEnabled",
+          "value": 0,
+          "kind": "DWord"
+        },
+        {
+          "path": "HKLM:\\SOFTWARE\\Policies\\Google\\Chrome",
+          "name": "BackgroundModeEnabled",
+          "value": 0,
+          "kind": "DWord"
+        }
+      ]
+    },
+    {
+      "id": "onedrive-off",
+      "name": "OneDrive sync off",
+      "admin": true,
+      "minBuild": 10240,
+      "proOnly": true,
+      "hardware": "onedrive",
+      "operations": [
+        {
+          "path": "HKLM:\\SOFTWARE\\Policies\\Microsoft\\Windows\\OneDrive",
+          "name": "DisableFileSyncNGSC",
+          "value": 1,
+          "kind": "DWord"
+        }
+      ]
+    },
+    {
+      "id": "memory-integrity-off",
+      "name": "Memory Integrity off",
+      "admin": true,
+      "minBuild": 10240,
+      "hardware": "memory-integrity",
+      "operations": [
+        {
+          "path": "HKLM:\\SYSTEM\\CurrentControlSet\\Control\\DeviceGuard\\Scenarios\\HypervisorEnforcedCodeIntegrity",
+          "name": "Enabled",
+          "value": 0,
+          "kind": "DWord"
+        }
+      ]
+    },
+    {
+      "id": "windows-cleanup",
+      "name": "Windows cleanup",
+      "operations": [
+        {
+          "path": "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\AdvertisingInfo",
+          "name": "Enabled",
+          "value": 0,
+          "kind": "DWord"
+        },
+        {
+          "path": "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Privacy",
+          "name": "TailoredExperiencesWithDiagnosticDataEnabled",
+          "value": 0,
+          "kind": "DWord"
+        },
+        {
+          "path": "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "name": "SubscribedContent-338389Enabled",
+          "value": 0,
+          "kind": "DWord"
+        },
+        {
+          "path": "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "name": "SubscribedContent-310093Enabled",
+          "value": 0,
+          "kind": "DWord"
+        },
+        {
+          "path": "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "name": "SubscribedContent-338393Enabled",
+          "value": 0,
+          "kind": "DWord"
+        },
+        {
+          "path": "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "name": "SubscribedContent-353694Enabled",
+          "value": 0,
+          "kind": "DWord"
+        }
+      ]
+    },
+    {
+      "id": "cpu-responsiveness",
+      "name": "CPU responsiveness",
+      "admin": true,
+      "powerSettings": [
+        {
+          "subgroup": "54533251-82be-4824-96c1-47b60b740d00",
+          "setting": "be337238-0d82-4146-a960-4f3749d470c7",
+          "value": 2
+        },
+        {
+          "subgroup": "54533251-82be-4824-96c1-47b60b740d00",
+          "setting": "36687f9e-e3a5-4dbf-b1dc-15eb381c6863",
+          "value": 0
+        },
+        {
+          "subgroup": "54533251-82be-4824-96c1-47b60b740d00",
+          "setting": "bc5038f7-23e0-4960-96da-33abaf5935ec",
+          "value": 100
+        }
+      ]
+    },
+    {
+      "id": "pcie-performance",
+      "name": "PCIe performance",
+      "admin": true,
+      "powerSettings": [
+        {
+          "subgroup": "501a4d13-42af-4429-9fd1-a8218c268e20",
+          "setting": "ee12f906-d277-404b-b6da-e5fa1a576df5",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "ethernet-latency",
+      "name": "Ethernet low latency",
+      "admin": true,
+      "networkSettings": [
+        {
+          "keyword": "*InterruptModeration",
+          "value": [
+            "0"
+          ],
+          "required": true
+        },
+        {
+          "keyword": "*EEE",
+          "value": [
+            "0"
+          ]
+        },
+        {
+          "keyword": "EnableGreenEthernet",
+          "value": [
+            "0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "network-rss",
+      "name": "Multicore networking",
+      "admin": true,
+      "networkSettings": [
+        {
+          "keyword": "*RSS",
+          "value": [
+            "1"
+          ],
+          "required": true
+        }
+      ]
+    },
+    {
+      "id": "game-mode",
+      "operations": [
+        {
+          "path": "HKCU:\\Software\\Microsoft\\GameBar",
+          "name": "AllowAutoGameMode",
+          "value": 1,
+          "kind": "DWord"
+        },
+        {
+          "path": "HKCU:\\Software\\Microsoft\\GameBar",
+          "name": "AutoGameModeEnabled",
+          "value": 1,
+          "kind": "DWord"
+        }
+      ]
+    },
+    {
+      "id": "game-capture",
+      "operations": [
+        {
+          "path": "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\GameDVR",
+          "name": "AppCaptureEnabled",
+          "value": 0,
+          "kind": "DWord"
+        },
+        {
+          "path": "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\GameDVR",
+          "name": "HistoricalCaptureEnabled",
+          "value": 0,
+          "kind": "DWord"
+        },
+        {
+          "path": "HKCU:\\System\\GameConfigStore",
+          "name": "GameDVR_Enabled",
+          "value": 0,
+          "kind": "DWord"
+        }
+      ]
+    },
+    {
+      "id": "transparency",
+      "operations": [
+        {
+          "path": "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
+          "name": "EnableTransparency",
+          "value": 0,
+          "kind": "DWord"
+        }
+      ]
+    },
+    {
+      "id": "advertising",
+      "operations": [
+        {
+          "path": "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\AdvertisingInfo",
+          "name": "Enabled",
+          "value": 0,
+          "kind": "DWord"
+        }
+      ]
+    },
+    {
+      "id": "tailored",
+      "operations": [
+        {
+          "path": "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Privacy",
+          "name": "TailoredExperiencesWithDiagnosticDataEnabled",
+          "value": 0,
+          "kind": "DWord"
+        }
+      ]
+    },
+    {
+      "id": "tips",
+      "operations": [
+        {
+          "path": "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "name": "SubscribedContent-338389Enabled",
+          "value": 0,
+          "kind": "DWord"
+        }
+      ]
+    },
+    {
+      "id": "welcome",
+      "operations": [
+        {
+          "path": "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "name": "SubscribedContent-310093Enabled",
+          "value": 0,
+          "kind": "DWord"
+        }
+      ]
+    },
+    {
+      "id": "suggestions",
+      "operations": [
+        {
+          "path": "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "name": "SubscribedContent-338393Enabled",
+          "value": 0,
+          "kind": "DWord"
+        },
+        {
+          "path": "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "name": "SubscribedContent-353694Enabled",
+          "value": 0,
+          "kind": "DWord"
+        }
+      ]
+    }
+  ],
+  "guides": [
+    {
+      "id": "game-audio",
+      "uri": "ms-settings:sound"
+    },
+    {
+      "id": "notifications",
+      "uri": "ms-settings:notifications"
+    },
+    {
+      "id": "graphics",
+      "uri": "ms-settings:display-advancedgraphics"
+    },
+    {
+      "id": "refresh-rate",
+      "uri": "ms-settings:display-advanced"
+    },
+    {
+      "id": "startup",
+      "uri": "ms-settings:startupapps"
+    },
+    {
+      "id": "storage",
+      "uri": "ms-settings:storagesense"
+    },
+    {
+      "id": "network-adapter",
+      "uri": "ms-settings:network-status"
+    },
+    {
+      "id": "updates",
+      "uri": "ms-settings:windowsupdate"
+    }
+  ],
+  "links": [
+    {
+      "id": "app-notifications",
+      "source": "https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-admx-wpn#notoastnotification"
+    },
+    {
+      "id": "keyboard-shortcuts",
+      "source": "https://learn.microsoft.com/en-us/windows/win32/dxtecharts/disabling-shortcut-keys-in-games"
+    },
+    {
+      "id": "active-cooling",
+      "source": "https://learn.microsoft.com/en-us/windows-hardware/drivers/kernel/device-level-thermal-management"
+    },
+    {
+      "id": "nvme-latency",
+      "source": "https://learn.microsoft.com/en-us/windows-hardware/design/component-guidelines/power-management-for-storage-hardware-devices-nvme"
+    },
+    {
+      "id": "sata-link-power",
+      "source": "https://learn.microsoft.com/en-us/windows-hardware/customize/power-settings/disk-settings-link-power-management-mode---hipm-dipm"
+    },
+    {
+      "id": "windowed-vrr",
+      "source": "https://devblogs.microsoft.com/directx/os-variable-refresh-rate/"
+    },
+    {
+      "id": "ethernet-idle-sleep",
+      "source": "https://learn.microsoft.com/en-us/windows-hardware/drivers/network/standardized-inf-keywords-for-ndis-selective-suspend"
+    },
+    {
+      "id": "wifi-smps",
+      "source": "https://www.intel.com/content/www/us/en/support/articles/000005585/wireless/legacy-intel-wireless-products.html"
+    },
+    {
+      "id": "wifi-uapsd",
+      "source": "https://www.intel.com/content/www/us/en/support/articles/000005585/wireless/legacy-intel-wireless-products.html"
+    },
+    {
+      "id": "game-audio",
+      "source": "https://learn.microsoft.com/en-us/windows/win32/coreaudio/stream-attenuation"
+    },
+    {
+      "id": "notifications",
+      "source": "https://support.microsoft.com/en-us/windows/experience/notifications-and-do-not-disturb-in-windows"
+    },
+    {
+      "id": "graphics",
+      "source": "https://support.microsoft.com/en-US/Windows/Hardware/Display-Graphics/optimizations-for-windowed-games-in-windows-11"
+    },
+    {
+      "id": "rankly-website",
+      "source": "https://rankly.win/"
+    },
+    {
+      "id": "rankly-x",
+      "source": "https://x.com/Rankly_win"
+    },
+    {
+      "id": "rankly-tiktok",
+      "source": "https://www.tiktok.com/@rankly_win"
+    },
+    {
+      "id": "rankly-youtube",
+      "source": "https://www.youtube.com/@Rankly_win"
+    }
+  ],
+  "powerControls": {
+    "performance-power": [
+      {
+        "subgroup": "54533251-82be-4824-96c1-47b60b740d00",
+        "setting": "be337238-0d82-4146-a960-4f3749d470c7",
+        "value": 2
+      },
+      {
+        "subgroup": "54533251-82be-4824-96c1-47b60b740d00",
+        "setting": "36687f9e-e3a5-4dbf-b1dc-15eb381c6863",
+        "value": 0
+      },
+      {
+        "subgroup": "54533251-82be-4824-96c1-47b60b740d00",
+        "setting": "bc5038f7-23e0-4960-96da-33abaf5935ec",
+        "value": 100
+      },
+      {
+        "subgroup": "501a4d13-42af-4429-9fd1-a8218c268e20",
+        "setting": "ee12f906-d277-404b-b6da-e5fa1a576df5",
+        "value": 0
+      }
+    ],
+    "core-parking": [
+      {
+        "subgroup": "54533251-82be-4824-96c1-47b60b740d00",
+        "setting": "0cc5b647-c1df-4637-891a-dec35c318583",
+        "value": 100
+      }
+    ],
+    "active-cooling": [
+      {
+        "subgroup": "54533251-82be-4824-96c1-47b60b740d00",
+        "setting": "94d3a615-a899-4ac5-ae2b-e4d8f634367f",
+        "value": 1
+      }
+    ],
+    "nvme-latency": [
+      {
+        "subgroup": "0012ee47-9041-4b5d-9b77-535fba8b1442",
+        "setting": "fc95af4d-40e7-4b6d-835a-56d131dbc80e",
+        "value": 0
+      },
+      {
+        "subgroup": "0012ee47-9041-4b5d-9b77-535fba8b1442",
+        "setting": "dbc9e238-6de9-49e3-92cd-8c2b4946b472",
+        "value": 0
+      }
+    ],
+    "sata-link-power": [
+      {
+        "subgroup": "0012ee47-9041-4b5d-9b77-535fba8b1442",
+        "setting": "0b2d69d7-a2a1-449c-9680-f91c70521c60",
+        "value": 0
+      }
+    ],
+    "wifi-performance": [
+      {
+        "subgroup": "19cbb8fa-5279-450e-9fac-8a3d5fedd0c1",
+        "setting": "12bbebe6-58d6-4636-95bb-3217ef867c1a",
+        "value": 0
+      }
+    ],
+    "usb-stability": [
+      {
+        "subgroup": "2a737441-1930-4402-8d77-b2bebba308a3",
+        "setting": "48e6b7a6-50f5-4782-a5d4-53bb8f07e226",
+        "value": 0
+      }
+    ],
+    "stay-awake": [
+      {
+        "subgroup": "7516b95f-f776-4464-8c53-06167f40cc99",
+        "setting": "3c0bc021-c8a8-4e07-a973-6b14cbcb2b7e",
+        "value": 0
+      },
+      {
+        "subgroup": "238c9fa8-0aad-41ed-83f4-97be242c8f20",
+        "setting": "29f6c1db-86da-48c5-9fdb-f2b67b1f44da",
+        "value": 0
+      },
+      {
+        "subgroup": "238c9fa8-0aad-41ed-83f4-97be242c8f20",
+        "setting": "9d7815a6-7ee4-497e-8888-515a05f02364",
+        "value": 0
+      }
+    ],
+    "hdd-readiness": [
+      {
+        "subgroup": "0012ee47-9041-4b5d-9b77-535fba8b1442",
+        "setting": "6738e2c4-e8a5-4a42-b16a-e040e769756e",
+        "value": 0
+      }
+    ]
+  },
+  "networkControls": {
+    "ethernet-idle-sleep": [
+      {
+        "keyword": "*SelectiveSuspend",
+        "value": [
+          "0"
+        ],
+        "required": true
+      }
+    ],
+    "ethernet-optimization": [
+      {
+        "keyword": "*InterruptModeration",
+        "value": [
+          "0"
+        ]
+      },
+      {
+        "keyword": "*EEE",
+        "value": [
+          "0"
+        ]
+      },
+      {
+        "keyword": "EnableGreenEthernet",
+        "value": [
+          "0"
+        ]
+      },
+      {
+        "keyword": "*RSS",
+        "value": [
+          "1"
+        ]
+      }
+    ]
+  },
+  "wifiControls": {
+    "wifi-smps": {
+      "keyword": "MIMOPowerSaveMode",
+      "target": "No SMPS"
+    },
+    "wifi-uapsd": {
+      "keyword": "uAPSD",
+      "target": "Disabled"
+    }
+  },
+  "keyboardShortcuts": [
+    "sticky",
+    "toggle",
+    "filter"
+  ],
+  "leanServices": [
+    "WSearch",
+    "SysMain",
+    "DiagTrack"
+  ],
+  "backgroundApps": [
+    {
+      "id": "chrome",
+      "name": "Google Chrome",
+      "executables": [
+        "chrome.exe"
+      ]
+    },
+    {
+      "id": "edge",
+      "name": "Microsoft Edge",
+      "executables": [
+        "msedge.exe"
+      ]
+    },
+    {
+      "id": "firefox",
+      "name": "Firefox",
+      "executables": [
+        "firefox.exe"
+      ]
+    },
+    {
+      "id": "discord",
+      "name": "Discord",
+      "executables": [
+        "Discord.exe",
+        "DiscordCanary.exe",
+        "DiscordPTB.exe"
+      ]
+    },
+    {
+      "id": "spotify",
+      "name": "Spotify",
+      "executables": [
+        "Spotify.exe"
+      ]
+    },
+    {
+      "id": "teams",
+      "name": "Microsoft Teams",
+      "executables": [
+        "ms-teams.exe",
+        "Teams.exe"
+      ]
+    },
+    {
+      "id": "onedrive",
+      "name": "OneDrive",
+      "executables": [
+        "OneDrive.exe"
+      ]
+    }
+  ],
+  "retiredTweakIds": [
+    "defender-realtime-pause",
+    "defender-persistent-off",
+    "defender-control-off"
+  ],
+  "memoryIntegrityPath": "HKLM:\\SYSTEM\\CurrentControlSet\\Control\\DeviceGuard\\Scenarios\\HypervisorEnforcedCodeIntegrity",
+  "gameGpuRegistry": "HKCU:\\Software\\Microsoft\\DirectX\\UserGpuPreferences"
+}

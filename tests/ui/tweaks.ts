@@ -20,7 +20,7 @@ window.rankly={
  apply:(ids:string[])=>{for(const id of ids)applied.set(id,id==='memory-integrity-off'?{pending:true,label:'Restart required',reason:'Change saved. Memory Integrity is still running until restart.'}:{enabled:true});const entry={id:'fixture-'+journal.length,date:new Date().toISOString(),ids,names:ids.map(id=>tweaks.find(t=>t.id===id)!.name),status:'applied'};journal.push(entry);return ok({entry,message:'Tweaks applied and backed up.'});},
  openSettings:()=>ok(undefined),openSource:()=>ok(undefined),exportReport:()=>ok(null),windowControl:()=>ok(undefined),
  // Simulates a newer published release so the update notice can be reviewed.
- checkUpdate:()=>ok({current:APP_VERSION,latest:'1.1.0',newer:true,url:'https://github.com/Ranklywin/rankly-tweaks/releases/tag/v1.1.0',publishedAt:new Date().toISOString(),checkedAt:new Date().toISOString()}),openRelease:()=>ok(undefined),
+ checkUpdate:()=>ok({current:APP_VERSION,latest:'1.1.0',newer:true,url:'https://github.com/Ranklywin/rankly-tweaks/releases/tag/v1.1.0',publishedAt:new Date().toISOString(),checkedAt:new Date().toISOString()}),installUpdate:()=>ok(undefined),
  network:()=>ok({target:'Fixture',testedAt:new Date().toISOString(),samples:[]})
 };
 await import('../../src/main.tsx');

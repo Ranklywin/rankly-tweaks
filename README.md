@@ -4,10 +4,11 @@ A free, open-source app for Windows gaming tweaks.
 
 ## Download
 
-[**Download v1.0.0**](https://github.com/Ranklywin/rankly-tweaks/releases/download/v1.0.0/Rankly-Tweaks-1.0.0.exe)
+[**Download v1.1.0**](https://github.com/Ranklywin/rankly-tweaks/releases/download/v1.1.0/Rankly-Tweaks-1.1.0-setup.exe)
 
-Windows 10 21H2+ or Windows 11, x64. Portable, requires administrator access,
-and currently unsigned. [Release notes and checksum](https://github.com/Ranklywin/rankly-tweaks/releases/tag/v1.0.0).
+Windows 10 21H2+ or Windows 11, x64. Small installer with in-app updates;
+requires administrator access and is not yet code-signed.
+[Release notes and checksum](https://github.com/Ranklywin/rankly-tweaks/releases/tag/v1.1.0).
 
 - Gaming, graphics, power, input, and network controls.
 - A performance checkup for setup problems, and a mouse polling test.
@@ -19,7 +20,7 @@ Opening the app does not apply tweaks.
 
 ## Development
 
-Use Node.js 24:
+Built with [Tauri](https://tauri.app/) (Rust) and React. Use Node.js 24 and stable Rust:
 
 ```sh
 npm ci
@@ -27,7 +28,8 @@ npm run dev
 ```
 
 Open `http://127.0.0.1:5178/tests/ui/tweaks.html` for the simulated browser preview.
-Build a Windows executable with `npm run package`.
+Run the desktop app with `npm run desktop` and build the installer with `npm run package`.
+See [the migration notes](docs/tauri-migration.md) for how the backend is organized.
 
 ## Rankly
 

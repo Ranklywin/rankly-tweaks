@@ -1,0 +1,40 @@
+[package]
+name = "rankly-tweaks"
+version = "1.1.0"
+description = "Windows gaming controls for graphics, CPU, networking, input, and background activity."
+authors = ["Rankly"]
+license = "MIT"
+repository = "https://github.com/ranklywin/rankly-tweaks"
+edition = "2021"
+rust-version = "1.85"
+
+[lib]
+name = "rankly_tweaks_lib"
+crate-type = ["rlib"]
+
+[profile.release]
+codegen-units = 1
+lto = true
+opt-level = "s"
+panic = "abort"
+strip = true
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+base64 = "0.23.1"
+chrono = "0.4.45"
+regex = "1.13.1"
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = { version = "1.0.154", features = ["preserve_order"] }
+tauri = { version = "2", features = [] }
+tauri-plugin-dialog = "2"
+tauri-plugin-opener = "2"
+tauri-plugin-process = "2"
+tauri-plugin-single-instance = "2"
+tauri-plugin-updater = "2"
+uuid = { version = "1.26.1", features = ["v4"] }
+
+[dev-dependencies]
+flate2 = "1.1.11"

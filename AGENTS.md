@@ -4,6 +4,13 @@
 
 - Keep the README, release notes, and user-facing explanations short and simple.
 
+## Backend
+
+- The Windows backend is Rust in `src-tauri/`. `shared/*.mjs` stays the source of
+  the catalog; run `npm run catalog` after changing it.
+- Behavior changes to resolution, backups, or generated PowerShell must update the
+  Rust tests deliberately; the parity fixtures record the original behavior.
+
 ## UI iteration
 
 - Always launch or reuse a visible browser preview when iterating on the UI.

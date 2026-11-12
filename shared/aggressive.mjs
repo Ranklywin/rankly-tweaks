@@ -11,15 +11,3 @@ export const backgroundApps = Object.freeze([
   { id:'teams', name:'Microsoft Teams', executables:['ms-teams.exe','Teams.exe'] },
   { id:'onedrive', name:'OneDrive', executables:['OneDrive.exe'] },
 ]);
-
-export function validServiceValue(value) {
-  return value && [2,3,4].includes(value.startup) && typeof value.running==='boolean' &&
-    value.delayed && typeof value.delayed.exists==='boolean' &&
-    (!value.delayed.exists || (value.delayed.kind==='DWord' && [0,1].includes(value.delayed.value)));
-}
-
-export function equalServiceValue(expected, actual) {
-  return expected?.startup===actual?.startup && expected?.running===actual?.running &&
-    (!expected?.delayed || (expected.delayed.exists===actual?.delayed?.exists &&
-      (!expected.delayed.exists || (expected.delayed.kind===actual.delayed.kind && expected.delayed.value===actual.delayed.value))));
-}

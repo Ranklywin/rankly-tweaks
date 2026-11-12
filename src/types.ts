@@ -26,7 +26,7 @@ export interface NativeBridge {
   openSource(id:string):Promise<NativeResult<void>>;
   exportReport():Promise<NativeResult<string|null>>;
   checkUpdate():Promise<NativeResult<UpdateInfo>>;
-  openRelease():Promise<NativeResult<void>>;
+  installUpdate():Promise<NativeResult<void>>;
   windowControl(action:string):Promise<NativeResult<void>>;
 }
 declare global { interface Window { rankly?: NativeBridge } }

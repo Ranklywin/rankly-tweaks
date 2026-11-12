@@ -1,76 +1,40 @@
 {
   "name": "rankly-tweaks",
   "productName": "Rankly Tweaks",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Windows gaming controls for graphics, CPU, networking, input, and background activity.",
   "author": "Rankly",
   "private": true,
   "type": "module",
-  "main": "electron/main.cjs",
   "scripts": {
-    "dev": "vite --host 127.0.0.1 --port 5178 --strictPort",
-    "desktop": "node scripts/launch.mjs",
+    "dev": "vite",
+    "desktop": "tauri dev",
     "build": "tsc -b && vite build",
     "test": "node --test tests/*.test.mjs",
-    "package": "npm run check:release && npm run build && node scripts/package.mjs",
-    "start": "node scripts/launch.mjs",
+    "test:rust": "cargo test --manifest-path src-tauri/Cargo.toml",
+    "catalog": "node scripts/export-catalog.mjs",
+    "package": "npm run check:release && node scripts/package.mjs",
     "notices:update": "node scripts/generate-notices.mjs",
-    "check:release": "node scripts/check-release.mjs && node scripts/generate-notices.mjs --check",
-    "verify:package": "node scripts/verify-package.mjs && powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts/verify-manifest.ps1",
-    "checksums": "node scripts/checksums.mjs"
+    "check:release": "node scripts/check-release.mjs && node scripts/export-catalog.mjs --check && node scripts/generate-notices.mjs --check",
+    "verify:package": "node scripts/verify-package.mjs",
+    "checksums": "node scripts/checksums.mjs",
+    "tauri": "tauri"
   },
   "devDependencies": {
     "@fontsource/poppins": "5.2.7",
+    "@tauri-apps/api": "2.12.4",
+    "@tauri-apps/cli": "2.12.4",
+    "@tauri-apps/plugin-process": "2.4.0",
+    "@tauri-apps/plugin-updater": "2.14.1",
     "@types/node": "24.13.4",
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
     "@vitejs/plugin-react": "6.1.1",
-    "electron": "44.3.0",
-    "electron-builder": "26.15.3",
     "lucide-react": "0.562.0",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "typescript": "5.9.3",
     "vite": "8.3.0"
-  },
-  "build": {
-    "appId": "gg.rankly.tweaks",
-    "asar": true,
-    "directories": {
-      "output": "release"
-    },
-    "files": [
-      "dist/**/*",
-      "electron/**/*",
-      "shared/**/*",
-      "package.json"
-    ],
-    "win": {
-      "target": [
-        "portable"
-      ],
-      "icon": "public/icon.png",
-      "signExecutable": false,
-      "requestedExecutionLevel": "requireAdministrator"
-    },
-    "portable": {
-      "artifactName": "Rankly-Tweaks-${version}.exe",
-      "requestExecutionLevel": "admin"
-    },
-    "extraFiles": [
-      {
-        "from": "LICENSE",
-        "to": "LICENSE.rankly.txt"
-      },
-      {
-        "from": "THIRD_PARTY_NOTICES.md",
-        "to": "THIRD_PARTY_NOTICES.md"
-      },
-      {
-        "from": "licenses",
-        "to": "licenses"
-      }
-    ]
   },
   "license": "MIT",
   "repository": {

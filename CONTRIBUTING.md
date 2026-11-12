@@ -1,12 +1,16 @@
 # Contributing
 
-Use Node.js 24 and `npm ci`. Before opening a pull request, run:
+Use Node.js 24, stable Rust, and `npm ci`. Before opening a pull request, run:
 
 ```sh
 npm test
+npm run test:rust
 npm run check:release
 npm run build
 ```
+
+After editing the catalog in `shared/`, run `npm run catalog` so the Rust
+backend reads the same definitions.
 
 New tweaks need evidence, support checks, backup/recovery, and meaningful tests.
 Keep the existing UI style. Test with mocks or a disposable VM, not your daily PC.

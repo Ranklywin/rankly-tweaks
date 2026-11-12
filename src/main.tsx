@@ -1,3 +1,5 @@
+// Must load before App so the app sees the native bridge at startup.
+import './bridge';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import '@fontsource/poppins/latin-400.css';
