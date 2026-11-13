@@ -5,10 +5,12 @@ pub mod apps;
 pub mod catalog;
 pub mod engine;
 pub mod js;
+pub mod nvapi;
 pub mod ops;
 pub mod ps;
 pub mod scripts;
 pub mod system;
+pub mod win;
 
 use apps::SessionApps;
 use catalog::CATALOG;

@@ -1,7 +1,7 @@
 {
   "name": "rankly-tweaks",
   "productName": "Rankly Tweaks",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Windows gaming controls for graphics, CPU, networking, input, and background activity.",
   "author": "Rankly",
   "private": true,

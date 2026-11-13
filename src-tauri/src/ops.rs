@@ -338,6 +338,7 @@ pub fn operation_key(o: &Value) -> Result<String, String> {
             js_string(get(o, "path")),
             js_string(get(o, "name"))
         ),
+        Some("nvidia-setting") => format!("nvidia-setting/{}", js_string(get(o, "setting"))),
         _ => return Err("Unknown setting type.".into()),
     })
 }
@@ -532,6 +533,10 @@ fn raw_operations_for(selected: &[Tweak], context: &Value) -> Result<Vec<Value>,
             }
             continue;
         }
+        if let Some(settings) = &t.nvidia_settings {
+            out.extend(nvidia_operations(settings, context));
+            continue;
+        }
         for r in t.operations.iter().flatten() {
             let mut pairs = vec![
                 ("type", json!("registry")),
@@ -552,6 +557,44 @@ fn raw_operations_for(selected: &[Tweak], context: &Value) -> Result<Vec<Value>,
         }
     }
     Ok(out)
+}
+
+/// NVIDIA global-profile changes, all or nothing: a control whose frame cap
+/// cannot be computed (no usable refresh rate) resolves to no operations.
+fn nvidia_operations(settings: &[crate::catalog::NvidiaSetting], context: &Value) -> Vec<Value> {
+    let nvidia = get(context, "nvidia");
+    if !truthy(nvidia.and_then(|n| get(n, "available"))) {
+        return Vec::new();
+    }
+    let mut out = Vec::new();
+    for s in settings {
+        let value = match &s.value {
+            Value::String(kind) if kind == "refresh-cap" => {
+                match nvidia
+                    .and_then(|n| get(n, "frameCap"))
+                    .and_then(Value::as_u64)
+                {
+                    Some(cap) if (1..=1023).contains(&cap) => json!(cap),
+                    _ => return Vec::new(),
+                }
+            }
+            Value::Number(n) if n.as_u64().is_some_and(|v| v <= u32::MAX as u64) => {
+                Value::Number(n.clone())
+            }
+            _ => return Vec::new(),
+        };
+        out.push(obj(vec![
+            ("type", json!("nvidia-setting")),
+            ("setting", json!(s.setting)),
+            ("value", value),
+        ]));
+    }
+    out
+}
+
+fn nvidia_value(v: Option<&Value>) -> Option<u32> {
+    v.and_then(Value::as_u64)
+        .and_then(|n| u32::try_from(n).ok())
 }
 
 pub fn unavailable_reason(t: &Tweak, context: &Value) -> Result<String, String> {
@@ -622,6 +665,16 @@ pub fn unavailable_reason(t: &Tweak, context: &Value) -> Result<String, String> 
         if hw == Some(name) && !flag(key) {
             return Ok(reason.into());
         }
+    }
+    let nvidia = |k: &str| truthy(get(context, "nvidia").and_then(|n| get(n, k)));
+    if matches!(hw, Some("nvidia" | "nvidia-vrr")) && !nvidia("available") {
+        return Ok("No NVIDIA graphics driver detected".into());
+    }
+    if hw == Some("nvidia-vrr") && !nvidia("vrrOn") {
+        return Ok("Turn on G-SYNC for your main display in the NVIDIA app first".into());
+    }
+    if hw == Some("hybrid-cpu") && !flag("hybrid") {
+        return Ok("Requires a CPU with performance and efficiency cores".into());
     }
     let cpu = get(context, "cpu");
     let cpu = if truthy(cpu) {
@@ -753,6 +806,14 @@ pub fn materialize_operations(
                 result.insert("exists".into(), json!(true));
                 out.push(Value::Object(result));
             }
+            Some("nvidia-setting") => {
+                if get(b, "available") == Some(&Value::Bool(false)) {
+                    return Err("The NVIDIA driver setting is no longer available.".into());
+                }
+                let mut result = o.clone();
+                result["exists"] = json!(true);
+                out.push(result);
+            }
             _ => {
                 if get(b, "available") == Some(&Value::Bool(false)) {
                     return Err("A selected device or power setting is no longer available.".into());
@@ -814,6 +875,16 @@ pub fn equal_operations(expected: &[Value], actual: &Value) -> Result<bool, Stri
                         })
                 } else {
                     json_eq(get(e, "value"), get(a, "value"))
+                }
+            }
+            // A setting without a user value means "driver default" on both sides.
+            Some("nvidia-setting") => {
+                if get(e, "exists") == Some(&Value::Bool(false)) {
+                    get(a, "exists") == Some(&Value::Bool(false))
+                } else {
+                    get(a, "exists") == Some(&Value::Bool(true))
+                        && nvidia_value(get(e, "value")).is_some()
+                        && nvidia_value(get(e, "value")) == nvidia_value(get(a, "value"))
                 }
             }
             _ => json_eq(get(e, "value"), get(a, "value")),
@@ -895,6 +966,19 @@ pub fn allowed_operation(o: &Value, definitions: &[Tweak]) -> bool {
                 })
             }
         }),
+        // Only the listed DWORD settings; a user value must be a valid DWORD.
+        Some("nvidia-setting") => {
+            let setting = nvidia_value(get(o, "setting"));
+            let value_ok = get(o, "exists") == Some(&Value::Bool(false))
+                || nvidia_value(get(o, "value")).is_some();
+            setting.is_some()
+                && value_ok
+                && definitions.iter().any(|t| {
+                    t.nvidia_settings
+                        .as_ref()
+                        .is_some_and(|list| list.iter().any(|s| Some(s.setting) == setting))
+                })
+        }
         _ => false,
     }
 }
@@ -1011,6 +1095,45 @@ pub fn validate_backup_operations(entry: &Value, definitions: &[Tweak]) -> Resul
                 })
             {
                 return Err("The backup is missing part of a power control.".into());
+            }
+        }
+        // Every NVIDIA setting of the control is backed up, and each change is
+        // exactly the catalog value (or a frame cap inside the limiter's range).
+        if let Some(settings) = &t.nvidia_settings {
+            for s in settings {
+                let find = |list: &[Value]| {
+                    list.iter()
+                        .find(|o| {
+                            get_str(o, "type") == Some("nvidia-setting")
+                                && nvidia_value(get(o, "setting")) == Some(s.setting)
+                        })
+                        .cloned()
+                };
+                let (Some(original), Some(changed)) = (find(before), find(after)) else {
+                    return Err("The backup is missing part of an NVIDIA control.".into());
+                };
+                let original_ok = match get(&original, "exists") {
+                    Some(Value::Bool(false)) => true,
+                    Some(Value::Bool(true)) => nvidia_value(get(&original, "value")).is_some(),
+                    _ => false,
+                };
+                let target_ok = match &s.value {
+                    Value::String(kind) if kind == "refresh-cap" => {
+                        nvidia_value(get(&changed, "value"))
+                            .is_some_and(|v| (1..=1023).contains(&v))
+                    }
+                    v => {
+                        nvidia_value(Some(v)).is_some()
+                            && nvidia_value(Some(v)) == nvidia_value(get(&changed, "value"))
+                    }
+                };
+                if !original_ok
+                    || !target_ok
+                    || get(&changed, "exists") != Some(&Value::Bool(true))
+                    || truthy(get(&changed, "transform"))
+                {
+                    return Err("The NVIDIA backup contains an unexpected change.".into());
+                }
             }
         }
         if t.operations.as_ref().is_some_and(|list| {

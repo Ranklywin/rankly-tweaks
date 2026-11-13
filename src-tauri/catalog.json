@@ -1,5 +1,5 @@
 {
-  "version": "1.1.0",
+  "version": "1.2.0",
   "tweaks": [
     {
       "id": "gaming-optimization",
@@ -208,17 +208,69 @@
       ]
     },
     {
-      "id": "windowed-vrr",
-      "name": "Variable refresh for more games",
-      "minBuild": 18362,
-      "hardware": "vrr",
+      "id": "nvidia-low-latency",
+      "name": "NVIDIA low latency",
+      "admin": true,
+      "hardware": "nvidia",
+      "nvidiaSettings": [
+        {
+          "setting": 8102046,
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "nvidia-max-performance",
+      "name": "NVIDIA maximum performance",
+      "admin": true,
+      "hardware": "nvidia",
+      "nvidiaSettings": [
+        {
+          "setting": 274197361,
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "nvidia-gsync-latency",
+      "name": "G-SYNC low-latency setup",
+      "admin": true,
+      "hardware": "nvidia-vrr",
+      "nvidiaSettings": [
+        {
+          "setting": 11041231,
+          "value": 1199655232
+        },
+        {
+          "setting": 277041154,
+          "value": "refresh-cap"
+        }
+      ]
+    },
+    {
+      "id": "mpo-off",
+      "name": "Multi-plane overlay off",
+      "admin": true,
       "operations": [
         {
-          "path": "HKCU:\\Software\\Microsoft\\DirectX\\UserGpuPreferences",
-          "name": "DirectXUserGlobalSettings",
-          "value": "VRROptimizeEnable=1;",
-          "kind": "String",
-          "transform": "semicolon"
+          "path": "HKLM:\\SOFTWARE\\Microsoft\\Windows\\Dwm",
+          "name": "OverlayTestMode",
+          "value": 5,
+          "kind": "DWord"
+        }
+      ]
+    },
+    {
+      "id": "hybrid-pcore",
+      "name": "Prefer performance cores",
+      "admin": true,
+      "hardware": "hybrid-cpu",
+      "requireAllPowerSettings": true,
+      "powerSettings": [
+        {
+          "subgroup": "54533251-82be-4824-96c1-47b60b740d00",
+          "setting": "93b8b6dc-0698-4d1c-9ee4-0644e900c85d",
+          "value": 2
         }
       ]
     },
@@ -701,17 +753,69 @@
       ]
     },
     {
-      "id": "windowed-vrr",
-      "name": "Variable refresh for more games",
-      "minBuild": 18362,
-      "hardware": "vrr",
+      "id": "nvidia-low-latency",
+      "name": "NVIDIA low latency",
+      "admin": true,
+      "hardware": "nvidia",
+      "nvidiaSettings": [
+        {
+          "setting": 8102046,
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "nvidia-max-performance",
+      "name": "NVIDIA maximum performance",
+      "admin": true,
+      "hardware": "nvidia",
+      "nvidiaSettings": [
+        {
+          "setting": 274197361,
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": "nvidia-gsync-latency",
+      "name": "G-SYNC low-latency setup",
+      "admin": true,
+      "hardware": "nvidia-vrr",
+      "nvidiaSettings": [
+        {
+          "setting": 11041231,
+          "value": 1199655232
+        },
+        {
+          "setting": 277041154,
+          "value": "refresh-cap"
+        }
+      ]
+    },
+    {
+      "id": "mpo-off",
+      "name": "Multi-plane overlay off",
+      "admin": true,
       "operations": [
         {
-          "path": "HKCU:\\Software\\Microsoft\\DirectX\\UserGpuPreferences",
-          "name": "DirectXUserGlobalSettings",
-          "value": "VRROptimizeEnable=1;",
-          "kind": "String",
-          "transform": "semicolon"
+          "path": "HKLM:\\SOFTWARE\\Microsoft\\Windows\\Dwm",
+          "name": "OverlayTestMode",
+          "value": 5,
+          "kind": "DWord"
+        }
+      ]
+    },
+    {
+      "id": "hybrid-pcore",
+      "name": "Prefer performance cores",
+      "admin": true,
+      "hardware": "hybrid-cpu",
+      "requireAllPowerSettings": true,
+      "powerSettings": [
+        {
+          "subgroup": "54533251-82be-4824-96c1-47b60b740d00",
+          "setting": "93b8b6dc-0698-4d1c-9ee4-0644e900c85d",
+          "value": 2
         }
       ]
     },
@@ -986,6 +1090,21 @@
       ]
     },
     {
+      "id": "windowed-vrr",
+      "name": "Variable refresh for more games",
+      "minBuild": 18362,
+      "hardware": "vrr",
+      "operations": [
+        {
+          "path": "HKCU:\\Software\\Microsoft\\DirectX\\UserGpuPreferences",
+          "name": "DirectXUserGlobalSettings",
+          "value": "VRROptimizeEnable=1;",
+          "kind": "String",
+          "transform": "semicolon"
+        }
+      ]
+    },
+    {
       "id": "cpu-responsiveness",
       "name": "CPU responsiveness",
       "admin": true,
@@ -1228,8 +1347,24 @@
       "source": "https://learn.microsoft.com/en-us/windows-hardware/customize/power-settings/disk-settings-link-power-management-mode---hipm-dipm"
     },
     {
-      "id": "windowed-vrr",
-      "source": "https://devblogs.microsoft.com/directx/os-variable-refresh-rate/"
+      "id": "nvidia-low-latency",
+      "source": "https://github.com/NVIDIA/nvapi/blob/main/NvApiDriverSettings.h"
+    },
+    {
+      "id": "nvidia-max-performance",
+      "source": "https://github.com/NVIDIA/nvapi/blob/main/NvApiDriverSettings.h"
+    },
+    {
+      "id": "nvidia-gsync-latency",
+      "source": "https://blurbusters.com/gsync/gsync101-input-lag-tests-and-settings/14/"
+    },
+    {
+      "id": "mpo-off",
+      "source": "https://nvidia.custhelp.com/app/answers/detail/a_id/5157"
+    },
+    {
+      "id": "hybrid-pcore",
+      "source": "https://learn.microsoft.com/en-us/windows-hardware/customize/power-settings/configuration-for-hetero-power-scheduling-schedulingpolicy"
     },
     {
       "id": "ethernet-idle-sleep",
@@ -1364,6 +1499,13 @@
         "subgroup": "0012ee47-9041-4b5d-9b77-535fba8b1442",
         "setting": "6738e2c4-e8a5-4a42-b16a-e040e769756e",
         "value": 0
+      }
+    ],
+    "hybrid-pcore": [
+      {
+        "subgroup": "54533251-82be-4824-96c1-47b60b740d00",
+        "setting": "93b8b6dc-0698-4d1c-9ee4-0644e900c85d",
+        "value": 2
       }
     ]
   },

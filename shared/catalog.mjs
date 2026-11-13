@@ -7,9 +7,14 @@ import { keyboardShortcuts } from './keyboard-settings.mjs';
 import { wifiControls } from './wifi-settings.mjs';
 const reg=(path,name,value,kind='DWord',transform)=>({path,name,value,kind,...(transform?{transform}:{})});
 const operations = (...ids) => ids.flatMap(id => legacyTweaks.find(t => t.id===id).operations || []);
+// NVIDIA global driver profile settings (IDs and values from NVIDIA's NvApiDriverSettings.h).
+// 'refresh-cap' resolves to a frame cap just under the main display's refresh rate.
+const nvidia=(setting,value)=>({setting,value});
+const NV_PRERENDER_LIMIT=0x007BA09E, NV_POWER_MODE=0x1057EB71, NV_VSYNC=0x00A879CF, NV_FRAME_LIMITER=0x10835002;
+const NV_VSYNC_FORCE_ON=0x47814940;
 
 /** @typedef {{path:string,name:string,value:number|string,kind:string,transform?:string}} RegistrySetting */
-/** @typedef {{id:string,name:string,category:string,icon:string,tag:string,impact:string,description:string,detail:string,tradeoff:string,restart:string,primary:boolean,aggressive?:boolean,source?:string,services?:string[],keyboardShortcuts?:readonly string[],wifiSetting?:{keyword:string,target:string},admin?:boolean,minBuild?:number,proOnly?:boolean,hardware?:string,operations?:RegistrySetting[],power?:string,requireAllPowerSettings?:boolean,powerSettings?:{subgroup:string,setting:string,value:number}[],networkSettings?:{keyword:string,value:string[],required?:boolean}[]}} Tweak */
+/** @typedef {{id:string,name:string,category:string,icon:string,tag:string,impact:string,description:string,detail:string,tradeoff:string,restart:string,primary:boolean,aggressive?:boolean,source?:string,services?:string[],keyboardShortcuts?:readonly string[],wifiSetting?:{keyword:string,target:string},admin?:boolean,minBuild?:number,proOnly?:boolean,hardware?:string,operations?:RegistrySetting[],power?:string,requireAllPowerSettings?:boolean,powerSettings?:{subgroup:string,setting:string,value:number}[],networkSettings?:{keyword:string,value:string[],required?:boolean}[],nvidiaSettings?:{setting:number,value:number|string}[]}} Tweak */
 /** @type {Tweak[]} */
 export const tweaks = [
   {
@@ -98,13 +103,45 @@ export const tweaks = [
     operations:[reg('HKCU:\\Software\\Microsoft\\DirectX\\UserGpuPreferences','DirectXUserGlobalSettings','SwapEffectUpgradeEnable=1;','String','semicolon')],
   },
   {
-    id:'windowed-vrr',name:'Variable refresh for more games',category:'Graphics',icon:'Monitor',tag:'VRR displays',impact:'Smoothness & latency',
-    description:'Let G-SYNC and FreeSync work in DirectX 11 games without built-in VRR.',
-    detail:'Turns on the Windows variable refresh rate option. Supported DirectX 11 games that do not use VRR themselves can then follow your frame rate on a G-SYNC, FreeSync, or Adaptive-Sync display, avoiding tearing without the extra delay of fixed-rate V-Sync.',
-    tradeoff:'Takes effect only on a VRR display with VRR turned on in your graphics driver; Rankly checks the Windows and driver requirements but cannot confirm your monitor. Your G-SYNC or FreeSync settings stay unchanged. If a game flickers or misbehaves, restore this in Recovery.',
-    restart:'Restart game',primary:true,minBuild:18362,hardware:'vrr',
-    operations:[reg('HKCU:\\Software\\Microsoft\\DirectX\\UserGpuPreferences','DirectXUserGlobalSettings','VRROptimizeEnable=1;','String','semicolon')],
-    source:'https://devblogs.microsoft.com/directx/os-variable-refresh-rate/',
+    id:'nvidia-low-latency',name:'NVIDIA low latency',category:'Graphics',icon:'MousePointer2',tag:'NVIDIA',impact:'Input delay',
+    description:'Limit the driver to one queued frame so your inputs reach the screen sooner.',
+    detail:'Sets Maximum pre-rendered frames to 1 in your NVIDIA global driver profile, the same as Low Latency Mode "On". When the GPU is the bottleneck, fewer frames wait in line, so each frame shows newer input.',
+    tradeoff:'Helps GPU-limited DirectX 11, DirectX 9, and OpenGL games. DirectX 12 and Vulkan games manage their own queue, and games with NVIDIA Reflex override it. Can lower average FPS slightly when the CPU is the limit. Applies to every game until restored.',
+    restart:'Restart game',primary:true,admin:true,hardware:'nvidia',nvidiaSettings:[nvidia(NV_PRERENDER_LIMIT,1)],
+    source:'https://github.com/NVIDIA/nvapi/blob/main/NvApiDriverSettings.h',
+  },
+  {
+    id:'nvidia-max-performance',name:'NVIDIA maximum performance',category:'Graphics',icon:'Zap',tag:'NVIDIA',impact:'GPU clocks',
+    description:'Stop the GPU from lowering its clocks during light scenes and menus.',
+    detail:'Sets Power management mode to Prefer maximum performance in your NVIDIA global driver profile. The GPU keeps full clocks while a game runs instead of stepping down when the load drops, which can cause frame-time spikes when it ramps back up.',
+    tradeoff:'Raises power use and heat whenever a 3D or GPU-accelerated app is open, including some browsers and launchers. Little effect in games that already keep the GPU fully busy. Applies until restored.',
+    restart:'Restart game',primary:true,admin:true,hardware:'nvidia',nvidiaSettings:[nvidia(NV_POWER_MODE,1)],
+    source:'https://github.com/NVIDIA/nvapi/blob/main/NvApiDriverSettings.h',
+  },
+  {
+    id:'nvidia-gsync-latency',name:'G-SYNC low-latency setup',category:'Graphics',icon:'Monitor',tag:'G-SYNC displays',impact:'Smoothness & latency',
+    description:'Cap FPS just under your refresh rate with driver V-Sync on, the tested G-SYNC setup.',
+    detail:'Turns on Vertical Sync and sets the NVIDIA Frame Rate Limiter just under your main display\'s refresh rate (224 FPS at 240 Hz, 138 at 144 Hz). With G-SYNC active, frames stay inside the variable refresh range: no tearing, and no V-Sync input delay from hitting the refresh limit.',
+    tradeoff:'Requires G-SYNC or G-SYNC Compatible to be on for your main display. Caps every game, including ones you play uncapped, until restored. Turn off V-Sync inside games. After changing monitors or refresh rate, restore and apply again.',
+    restart:'Restart game',primary:true,admin:true,hardware:'nvidia-vrr',nvidiaSettings:[nvidia(NV_VSYNC,NV_VSYNC_FORCE_ON),nvidia(NV_FRAME_LIMITER,'refresh-cap')],
+    source:'https://blurbusters.com/gsync/gsync101-input-lag-tests-and-settings/14/',
+  },
+  {
+    id:'mpo-off',name:'Multi-plane overlay off',category:'Graphics',icon:'PanelsTopLeft',tag:'Troubleshooting',impact:'Display stability',
+    description:'Try this for flicker, black flashes, or stutter in borderless games or beside video.',
+    detail:'Disables Windows Multi-Plane Overlay (MPO) with the registry value NVIDIA publishes for this. MPO lets the GPU compose some layers directly; on affected PCs it causes flicker, black flashes, or stutter in windowed and borderless games, often with a video or second monitor open.',
+    tradeoff:'Only for existing flicker or stutter problems. MPO normally improves performance and power use, so turning it off can slightly raise GPU load where it was working well. Restart to apply or restore.',
+    restart:'Restart PC',primary:true,admin:true,
+    operations:[reg('HKLM:\\SOFTWARE\\Microsoft\\Windows\\Dwm','OverlayTestMode',5)],
+    source:'https://nvidia.custhelp.com/app/answers/detail/a_id/5157',
+  },
+  {
+    id:'hybrid-pcore',name:'Prefer performance cores',category:'CPU & power',icon:'Cpu',tag:'Hybrid CPUs',impact:'CPU scheduling',
+    description:'Run long-running game threads on P-cores before E-cores while plugged in.',
+    detail:'Sets the hidden Heterogeneous thread scheduling policy to Prefer performant processors in your current power plan, plugged in only. Long-running threads, such as a game\'s main and render threads, go to performance cores before efficiency cores.',
+    tradeoff:'For CPUs with performance and efficiency cores. Windows 11 already places most games well, so gains are largest on Windows 10 and in games that stutter when they land on E-cores. Uses more power. Battery settings stay unchanged.',
+    restart:'Instant',primary:true,admin:true,hardware:'hybrid-cpu',requireAllPowerSettings:true,powerSettings:powerControls['hybrid-pcore'],
+    source:'https://learn.microsoft.com/en-us/windows-hardware/customize/power-settings/configuration-for-hetero-power-scheduling-schedulingpolicy',
   },
   {
     id:'background-apps',name:'Background app control',category:'Windows',icon:'Layers',tag:'Optional',impact:'Background activity',
@@ -212,7 +249,13 @@ export const guides = [
   { id:'updates',name:'Windows & drivers',category:'Windows',icon:'RefreshCw',description:'Keep your system and drivers up to date.',detail:'Check for Windows updates and install GPU drivers from your GPU vendor. Schedule updates outside your gaming sessions.',uri:'ms-settings:windowsupdate' },
 ];
 
-export const recoveryTweaks = [...tweaks,...legacyV11Tweaks,...legacyTweaks.filter(old=>!tweaks.some(t=>t.id===old.id))];
+// Withdrawn from the library because Windows Settings already offers them; kept
+// so backups made with earlier versions still restore.
+export const retiredCatalogTweaks = Object.freeze([
+  { id:'windowed-vrr',name:'Variable refresh for more games',minBuild:18362,hardware:'vrr',
+    operations:[reg('HKCU:\\Software\\Microsoft\\DirectX\\UserGpuPreferences','DirectXUserGlobalSettings','VRROptimizeEnable=1;','String','semicolon')] },
+]);
+export const recoveryTweaks = [...tweaks,...retiredCatalogTweaks,...legacyV11Tweaks,...legacyTweaks.filter(old=>!tweaks.some(t=>t.id===old.id))];
 function select(ids,catalog) {
   if (!Array.isArray(ids) || ids.length<1 || ids.length>catalog.length || ids.some(id=>typeof id!=='string'||!catalog.some(t=>t.id===id)) || new Set(ids).size!==ids.length) throw new Error('Choose valid, unique tweaks from the library.');
   return ids.map(id=>catalog.find(t=>t.id===id));

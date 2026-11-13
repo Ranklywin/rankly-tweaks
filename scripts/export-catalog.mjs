@@ -15,8 +15,8 @@ import { APP_VERSION } from '../shared/version.mjs';
 
 const file = new URL('../src-tauri/catalog.json', import.meta.url);
 // Only fields the backend uses; interface copy stays in JavaScript.
-const definition = ({ id, name, admin, minBuild, proOnly, hardware, operations, power, requireAllPowerSettings, powerSettings, networkSettings, services, keyboardShortcuts, wifiSetting }) =>
-  ({ id, name, admin, minBuild, proOnly, hardware, operations, power, requireAllPowerSettings, powerSettings, networkSettings, services, keyboardShortcuts, wifiSetting });
+const definition = ({ id, name, admin, minBuild, proOnly, hardware, operations, power, requireAllPowerSettings, powerSettings, networkSettings, services, keyboardShortcuts, wifiSetting, nvidiaSettings }) =>
+  ({ id, name, admin, minBuild, proOnly, hardware, operations, power, requireAllPowerSettings, powerSettings, networkSettings, services, keyboardShortcuts, wifiSetting, nvidiaSettings });
 const catalog = {
   version: APP_VERSION,
   tweaks: tweaks.map(definition),

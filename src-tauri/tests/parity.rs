@@ -30,8 +30,18 @@ fn context(case: &Value) -> &'static Value {
     &FIXTURES["contexts"][case["context"].as_str().unwrap()]
 }
 
+/// Deliberate changes since the fixtures were recorded (see AGENTS.md):
+/// - windowed-vrr left the library (Windows Settings offers it) but stays restorable.
+/// - hybrid-pcore added one power-setting read to the capabilities script.
+const MOVED_TO_RECOVERY: [&str; 1] = ["windowed-vrr"];
+const ADDED_POWER_READS: [&str; 1] = ["93b8b6dc-0698-4d1c-9ee4-0644e900c85d"];
+
 fn definitions(case: &Value) -> Vec<Tweak> {
-    if case["recovery"] == json!(true) {
+    let moved = case["ids"].as_array().is_some_and(|ids| {
+        ids.iter()
+            .any(|id| MOVED_TO_RECOVERY.contains(&id.as_str().unwrap_or_default()))
+    });
+    if case["recovery"] == json!(true) || moved {
         validate_recovery_ids(&case["ids"]).unwrap()
     } else {
         validate_tweak_ids(&case["ids"]).unwrap()
@@ -93,7 +103,11 @@ fn tweak_resolution_matches() {
 fn availability_matches() {
     let mut failures = Vec::new();
     for c in cases("unavailable") {
-        let t = CATALOG.tweaks.iter().find(|t| t.id == c["id"]).unwrap();
+        let t = CATALOG
+            .recovery_tweaks
+            .iter()
+            .find(|t| t.id == c["id"])
+            .unwrap();
         if let Some(f) = outcome(
             c,
             "reason",
@@ -218,7 +232,15 @@ fn security_states_match() {
 #[test]
 fn static_scripts_match() {
     let s = &FIXTURES["scripts"];
-    assert_eq!(capabilities_script(), s["capabilities"].as_str().unwrap());
+    let lines = |text: &str| text.lines().map(String::from).collect::<Vec<_>>();
+    let current: Vec<String> = lines(&capabilities_script())
+        .into_iter()
+        .filter(|l| !ADDED_POWER_READS.iter().any(|g| l.contains(g)))
+        .collect();
+    assert_eq!(current, lines(s["capabilities"].as_str().unwrap()));
+    assert!(ADDED_POWER_READS
+        .iter()
+        .all(|g| capabilities_script().contains(g)));
     let path = r"C:\Users\x\AppData\Local\Temp\rankly-capabilities-1.xml";
     assert_eq!(
         graphics_script(path),

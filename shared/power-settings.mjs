@@ -24,6 +24,8 @@ export const powerControls={
     setting('238c9fa8-0aad-41ed-83f4-97be242c8f20','9d7815a6-7ee4-497e-8888-515a05f02364',0),
   ],
   'hdd-readiness':[setting('0012ee47-9041-4b5d-9b77-535fba8b1442','6738e2c4-e8a5-4a42-b16a-e040e769756e',0)],
+  // Hidden SCHEDPOLICY: 2 = Prefer performant processors for long-running threads.
+  'hybrid-pcore':[setting(cpu,'93b8b6dc-0698-4d1c-9ee4-0644e900c85d',2)],
 };
 
 // Driver keywords are used instead of localized display names.

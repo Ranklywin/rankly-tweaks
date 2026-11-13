@@ -4,11 +4,11 @@ A free, open-source app for Windows gaming tweaks.
 
 ## Download
 
-[**Download v1.1.0**](https://github.com/Ranklywin/rankly-tweaks/releases/download/v1.1.0/Rankly-Tweaks-1.1.0-setup.exe)
+[**Download v1.2.0**](https://github.com/Ranklywin/rankly-tweaks/releases/download/v1.2.0/Rankly-Tweaks-1.2.0-setup.exe)
 
 Windows 10 21H2+ or Windows 11, x64. Small installer with in-app updates;
 requires administrator access and is not yet code-signed.
-[Release notes and checksum](https://github.com/Ranklywin/rankly-tweaks/releases/tag/v1.1.0).
+[Release notes and checksum](https://github.com/Ranklywin/rankly-tweaks/releases/tag/v1.2.0).
 
 - Gaming, graphics, power, input, and network controls.
 - A performance checkup for setup problems, and a mouse polling test.

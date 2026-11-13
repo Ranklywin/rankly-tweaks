@@ -45,26 +45,116 @@ pub fn capabilities(run: &Runner) -> Result<Value, String> {
         .is_some_and(|w| w >= 206.0);
     context.insert("hags".into(), json!(hags));
     context.insert("vrr".into(), json!(vrr));
+    let display = crate::win::primary_display();
+    let mut nvidia = crate::nvapi::probe(display.as_ref().map(|d| d.0.as_str()));
+    if let Some(cap) = display.and_then(|d| crate::win::gsync_frame_cap(d.1)) {
+        nvidia["frameCap"] = json!(cap);
+    }
+    context.insert("nvidia".into(), nvidia);
+    context.insert("hybrid".into(), json!(crate::win::hybrid_cpu()));
     Ok(Value::Object(context))
 }
 
+fn is_nvidia(o: &Value) -> bool {
+    get(o, "type").and_then(Value::as_str) == Some("nvidia-setting")
+}
+
+fn nvidia_id(o: &Value) -> Result<u32, String> {
+    get(o, "setting")
+        .and_then(Value::as_u64)
+        .and_then(|v| u32::try_from(v).ok())
+        .ok_or_else(|| "Invalid NVIDIA setting.".to_string())
+}
+
 pub fn read_operations(run: &Runner, operations: &[Value]) -> Result<Value, String> {
-    run(
-        &scripts::build_read_script(operations)?,
-        ps::DEFAULT_TIMEOUT,
-    )
+    read_operations_with(run, &crate::nvapi::Driver, operations)
+}
+
+/// Reads PowerShell-backed settings in one script and NVIDIA settings through
+/// the driver, returning snapshots in the original order.
+pub fn read_operations_with(
+    run: &Runner,
+    drs: &dyn crate::nvapi::Drs,
+    operations: &[Value],
+) -> Result<Value, String> {
+    type Indexed<'a> = Vec<(usize, &'a Value)>;
+    let (nvidia, windows): (Indexed, Indexed) = operations
+        .iter()
+        .enumerate()
+        .partition(|(_, o)| is_nvidia(o));
+    let mut out = vec![Value::Null; operations.len()];
+    if !windows.is_empty() {
+        let list: Vec<Value> = windows.iter().map(|(_, o)| (*o).clone()).collect();
+        let read = run(&scripts::build_read_script(&list)?, ps::DEFAULT_TIMEOUT)?;
+        let read = read
+            .as_array()
+            .filter(|r| r.len() == list.len())
+            .ok_or("Windows returned an incomplete settings snapshot.")?;
+        for ((i, _), value) in windows.iter().zip(read) {
+            out[*i] = value.clone();
+        }
+    }
+    if !nvidia.is_empty() {
+        let ids = nvidia
+            .iter()
+            .map(|(_, o)| nvidia_id(o))
+            .collect::<Result<Vec<_>, _>>()?;
+        let snapshots = drs.read(&ids)?;
+        for ((i, _), s) in nvidia.iter().zip(snapshots) {
+            out[*i] = if s.exists {
+                json!({"type": "nvidia-setting", "setting": s.id, "exists": true, "value": s.value})
+            } else {
+                json!({"type": "nvidia-setting", "setting": s.id, "exists": false})
+            };
+        }
+    }
+    Ok(Value::Array(out))
 }
 
 pub fn write_operations(run: &Runner, operations: &[Value]) -> Result<(), String> {
-    let timeout = if operations
-        .iter()
-        .any(|o| get(o, "type") == Some(&json!("service")))
-    {
-        Duration::from_secs(90)
-    } else {
-        ps::DEFAULT_TIMEOUT
-    };
-    run(&scripts::build_write_script(operations)?, timeout).map(|_| ())
+    write_operations_with(run, &crate::nvapi::Driver, operations)
+}
+
+pub fn write_operations_with(
+    run: &Runner,
+    drs: &dyn crate::nvapi::Drs,
+    operations: &[Value],
+) -> Result<(), String> {
+    // Validate the whole batch first, including NVIDIA values.
+    scripts::build_write_script(operations)?;
+    let (nvidia, windows): (Vec<&Value>, Vec<&Value>) =
+        operations.iter().partition(|o| is_nvidia(o));
+    if !windows.is_empty() {
+        let list: Vec<Value> = windows.into_iter().cloned().collect();
+        let timeout = if list
+            .iter()
+            .any(|o| get(o, "type") == Some(&json!("service")))
+        {
+            Duration::from_secs(90)
+        } else {
+            ps::DEFAULT_TIMEOUT
+        };
+        run(&scripts::build_write_script(&list)?, timeout)?;
+    }
+    if !nvidia.is_empty() {
+        let changes = nvidia
+            .iter()
+            .map(|o| {
+                let id = nvidia_id(o)?;
+                if get(o, "exists") == Some(&Value::Bool(false)) {
+                    Ok((id, None))
+                } else {
+                    let v = get(o, "value")
+                        .and_then(Value::as_u64)
+                        .and_then(|v| u32::try_from(v).ok())
+                        .ok_or("Invalid NVIDIA value.")?;
+                    Ok((id, Some(v)))
+                }
+            })
+            .collect::<Result<Vec<_>, String>>()?;
+        drs.write(&changes)?;
+    }
+    Ok(())
 }
 
 pub fn resolve_operations(run: &Runner, selected: &[Tweak]) -> Result<Vec<Value>, String> {

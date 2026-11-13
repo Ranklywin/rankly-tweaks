@@ -2898,7 +2898,7 @@ checksum = "f8dcc9c7d52a811697d2151c701e0d08956f92b0e24136cf4cf27b57a6a0d9bf"
 
 [[package]]
 name = "rankly-tweaks"
-version = "1.1.0"
+version = "1.2.0"
 dependencies = [
  "base64 0.23.1",
  "chrono",
@@ -2914,6 +2914,7 @@ dependencies = [
  "tauri-plugin-single-instance",
  "tauri-plugin-updater",
  "uuid",
+ "windows-sys 0.61.2",
 ]
 
 [[package]]

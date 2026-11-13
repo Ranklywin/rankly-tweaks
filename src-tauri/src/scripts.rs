@@ -142,6 +142,7 @@ pub fn build_read_script(operations: &[Value]) -> Result<String, String> {
                 let (p, n) = (q(get(o, "path")), q(get(o, "name")));
                 format!("$key=Get-Item -LiteralPath {p} -ErrorAction SilentlyContinue; if ($null -ne $key -and $key.GetValueNames() -contains {n}) {{ @{{type='registry';path={p};name={n};exists=$true;value=$key.GetValue({n},$null,[Microsoft.Win32.RegistryValueOptions]::DoNotExpandEnvironmentNames);kind=$key.GetValueKind({n}).ToString()}} }} else {{ @{{type='registry';path={p};name={n};exists=$false}} }}")
             }
+            Some("nvidia-setting") => return Err("NVIDIA settings are read through the driver, not PowerShell.".into()),
             _ => return Err("Unknown setting type.".into()),
         };
         statements.push(s);
@@ -318,6 +319,11 @@ pub fn build_write_script(operations: &[Value]) -> Result<String, String> {
         }
         if !allowed_operation(o, &defs) {
             return Err("Setting is not in the tweak allowlist.".into());
+        }
+        // Validated here with the rest of the batch; written through the NVIDIA
+        // driver by the adapter, so no PowerShell is generated.
+        if ty == Some("nvidia-setting") {
+            continue;
         }
         let part = match ty {
             Some("wifi-property") => wifi_write_script(o)?,

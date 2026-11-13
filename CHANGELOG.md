@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.2.0
+
+- NVIDIA tweaks: low latency, maximum performance, and a G-SYNC low-latency
+  setup with a frame cap matched to your refresh rate.
+- Multi-plane overlay off, for flicker or stutter in borderless games.
+- Prefer performance cores on CPUs with P-cores and E-cores.
+- Removed Variable refresh for more games (it is in Windows Settings); old
+  backups still restore.
+
 ## 1.1.0
 
 - Rebuilt on Tauri 2 with a Rust backend: a much smaller download and memory

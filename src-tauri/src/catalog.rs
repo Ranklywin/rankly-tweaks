@@ -28,6 +28,14 @@ pub struct NetworkSetting {
     pub required: bool,
 }
 
+/// One NVIDIA global-profile DWORD. `value` is a number, or "refresh-cap" for a
+/// frame cap computed from the main display's refresh rate.
+#[derive(Debug, Clone, Deserialize)]
+pub struct NvidiaSetting {
+    pub setting: u32,
+    pub value: Value,
+}
+
 #[derive(Debug, Clone, Deserialize)]
 pub struct WifiSetting {
     pub keyword: String,
@@ -55,6 +63,7 @@ pub struct Tweak {
     pub services: Option<Vec<String>>,
     pub keyboard_shortcuts: Option<Vec<String>>,
     pub wifi_setting: Option<WifiSetting>,
+    pub nvidia_settings: Option<Vec<NvidiaSetting>>,
     /// Per-game GPU preference saved by older versions (recovery only).
     #[serde(skip)]
     pub game_preference: bool,
