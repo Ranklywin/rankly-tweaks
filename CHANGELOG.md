@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 1.2.1
 
 - Play ranked Fortnite on Rankly: a sidebar card, an Overview button, and a
   small invite you can close. Links open rankly.win only when clicked.
