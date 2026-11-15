@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- Play ranked Fortnite on Rankly: a sidebar card, an Overview button, and a
+  small invite you can close. Links open rankly.win only when clicked.
+- The Overview banner follows light mode and shows the current Emerald emblem.
+
 ## 1.2.0
 
 - NVIDIA tweaks: low latency, maximum performance, and a G-SYNC low-latency

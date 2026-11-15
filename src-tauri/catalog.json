@@ -1405,6 +1405,30 @@
     {
       "id": "rankly-youtube",
       "source": "https://www.youtube.com/@Rankly_win"
+    },
+    {
+      "id": "rankly-ranked-sidebar",
+      "source": "https://rankly.win/ranked?utm_source=rankly-tweaks&utm_medium=app&utm_campaign=play-invite&utm_content=sidebar"
+    },
+    {
+      "id": "rankly-ranked-overview",
+      "source": "https://rankly.win/ranked?utm_source=rankly-tweaks&utm_medium=app&utm_campaign=play-invite&utm_content=overview"
+    },
+    {
+      "id": "rankly-ranked-popup",
+      "source": "https://rankly.win/ranked?utm_source=rankly-tweaks&utm_medium=app&utm_campaign=play-invite&utm_content=popup"
+    },
+    {
+      "id": "rankly-ranked-after-tweaks",
+      "source": "https://rankly.win/ranked?utm_source=rankly-tweaks&utm_medium=app&utm_campaign=play-invite&utm_content=after-tweaks"
+    },
+    {
+      "id": "rankly-tournaments-popup",
+      "source": "https://rankly.win/tournaments?utm_source=rankly-tweaks&utm_medium=app&utm_campaign=play-invite&utm_content=popup"
+    },
+    {
+      "id": "rankly-tournaments-after-tweaks",
+      "source": "https://rankly.win/tournaments?utm_source=rankly-tweaks&utm_medium=app&utm_campaign=play-invite&utm_content=after-tweaks"
     }
   ],
   "powerControls": {

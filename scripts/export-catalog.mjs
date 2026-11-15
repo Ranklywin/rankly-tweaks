@@ -3,7 +3,7 @@
 // Run `npm run catalog` after editing shared/*.mjs; `--check` fails if stale.
 import { readFileSync, writeFileSync } from 'node:fs';
 import { tweaks, guides, recoveryTweaks } from '../shared/catalog.mjs';
-import { socials } from '../shared/socials.mjs';
+import { socials, playLinkList } from '../shared/socials.mjs';
 import { powerControls, networkControls } from '../shared/power-settings.mjs';
 import { wifiControls } from '../shared/wifi-settings.mjs';
 import { keyboardShortcuts } from '../shared/keyboard-settings.mjs';
@@ -22,7 +22,7 @@ const catalog = {
   tweaks: tweaks.map(definition),
   recoveryTweaks: recoveryTweaks.map(definition),
   guides: guides.map(({ id, uri }) => ({ id, uri })),
-  links: [...tweaks, ...guides, ...socials].filter(item => item.source).map(({ id, source }) => ({ id, source })),
+  links: [...tweaks, ...guides, ...socials, ...playLinkList].filter(item => item.source).map(({ id, source }) => ({ id, source })),
   powerControls, networkControls, wifiControls, keyboardShortcuts, leanServices, backgroundApps, retiredTweakIds,
   memoryIntegrityPath: MEMORY_INTEGRITY_PATH, gameGpuRegistry: GAME_GPU_REGISTRY,
 };

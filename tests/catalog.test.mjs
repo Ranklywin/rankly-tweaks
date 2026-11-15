@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import { tweaks, guides, recoveryTweaks } from '../shared/catalog.mjs';
-import { socials } from '../shared/socials.mjs';
+import { socials, playLinkList } from '../shared/socials.mjs';
 
 test('the Rust backend reads the current catalog export', () => {
   // Fails when shared/*.mjs changed without `npm run catalog`.
@@ -25,7 +25,12 @@ test('every tweak has unique IDs and the copy the interface shows', () => {
 
 test('guides open Windows Settings pages and external links use https', () => {
   for (const g of guides) assert.match(g.uri, /^ms-settings:[a-z-]+$/, g.id);
-  for (const s of socials) assert.match(s.source, /^https:\/\//, s.id);
+  for (const s of [...socials, ...playLinkList]) assert.match(s.source, /^https:\/\//, s.id);
+});
+
+test('play links open rankly.win tagged with their placement only', () => {
+  assert.equal(new Set(playLinkList.map(l => l.id)).size, playLinkList.length);
+  for (const l of playLinkList) assert.match(l.source, /^https:\/\/rankly\.win\/(ranked|tournaments)\?utm_source=rankly-tweaks&utm_medium=app&utm_campaign=play-invite&utm_content=[a-z-]+$/, l.id);
 });
 
 test('the updater only trusts this repository and a configured key', () => {
